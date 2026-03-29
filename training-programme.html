@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12-Week Strength & Hypertrophy Programme</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f5f0e8;
+    --accent: #c0392b;
+    --accent2: #2c3e50;
+    --muted: #888;
+    --border: #d4cdc0;
+    --tag-bg: #2c3e50;
+    --tag-txt: #f5f0e8;
+    --highlight: #f9e4c8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* ── COVER ─────────────────────────────────────────── */
+  .cover {
+    min-height: 100vh;
+    background: var(--accent2);
+    color: var(--paper);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 64px;
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    border: 2px solid rgba(192,57,43,0.3);
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 340px; height: 340px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(192,57,43,0.2);
+  }
+  .cover-label {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.9;
+  }
+  .cover-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin: 16px 0 24px;
+    color: var(--paper);
+  }
+  .cover-title span { color: var(--accent); }
+  .cover-sub {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: rgba(245,240,232,0.7);
+    margin-bottom: 40px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .cover-meta-item strong {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+  .cover-meta-item span {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .cover-bottom {
+    border-top: 1px solid rgba(245,240,232,0.2);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .cover-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .cover-stat {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.5;
+  }
+  .cover-stat strong { color: var(--paper); opacity: 1; display: block; font-size: 14px; letter-spacing: 0; }
+
+  /* ── PAGE LAYOUT ────────────────────────────────────── */
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 56px 48px;
+  }
+
+  /* ── SECTION HEADERS ────────────────────────────────── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: 1px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin: 32px 0 12px;
+    color: var(--accent2);
+  }
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin: 24px 0 8px;
+    color: var(--ink);
+  }
+  p { margin-bottom: 12px; color: #333; }
+
+  /* ── CALLOUT BOXES ──────────────────────────────────── */
+  .callout {
+    background: var(--highlight);
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .callout strong { color: var(--accent); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+
+  .callout-dark {
+    background: var(--accent2);
+    color: var(--paper);
+    border-left: 4px solid var(--accent);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .callout-dark strong { color: var(--accent); display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+  .callout-dark p { color: rgba(245,240,232,0.85); margin: 0; }
+
+  /* ── PHASE OVERVIEW TABLE ───────────────────────────── */
+  .phase-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .phase-card {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .phase-card-head {
+    background: var(--accent2);
+    color: var(--paper);
+    padding: 12px 16px;
+  }
+  .phase-card-head .phase-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .phase-card-head .phase-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+  .phase-card-body {
+    padding: 14px 16px;
+    background: white;
+  }
+  .phase-card-body .meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-card-body .meta-row:last-child { border-bottom: none; }
+  .meta-key { color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .meta-val { font-weight: 600; color: var(--ink); }
+
+  /* ── SPLIT GRID ─────────────────────────────────────── */
+  .split-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .split-card {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+  .split-card-head {
+    background: var(--accent);
+    color: white;
+    padding: 10px 14px;
+  }
+  .split-card-head .day { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; }
+  .split-card-head .session { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; }
+  .split-card-body { padding: 12px 14px; background: white; }
+  .split-card-body li { font-size: 12px; color: #444; margin-bottom: 4px; list-style: none; padding-left: 12px; position: relative; }
+  .split-card-body li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 10px; top: 1px; }
+
+  /* ── SESSION BLOCK ──────────────────────────────────── */
+  .session-block {
+    margin-bottom: 48px;
+    page-break-inside: avoid;
+  }
+  .session-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 20px;
+    border-radius: 8px 8px 0 0;
+  }
+  .session-tag {
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .session-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+  .session-meta-bar {
+    background: #2c3e50;
+    color: rgba(245,240,232,0.7);
+    padding: 8px 20px;
+    display: flex;
+    gap: 24px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  .session-meta-bar span { color: var(--paper); font-weight: 600; }
+
+  /* ── EXERCISE TABLE ─────────────────────────────────── */
+  .ex-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1.5px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    background: white;
+  }
+  .ex-table thead tr {
+    background: #eae5dc;
+  }
+  .ex-table thead th {
+    padding: 9px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+  }
+  .ex-table thead th:last-child { border-right: none; }
+  .ex-table tbody tr {
+    border-top: 1px solid var(--border);
+    transition: background 0.1s;
+  }
+  .ex-table tbody tr:nth-child(even) { background: #faf8f4; }
+  .ex-table tbody td {
+    padding: 10px 14px;
+    vertical-align: top;
+    border-right: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .ex-table tbody td:last-child { border-right: none; }
+  .ex-name { font-weight: 600; color: var(--ink); }
+  .ex-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .sets-reps { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.5px; color: var(--accent2); }
+  .tempo { font-family: monospace; font-size: 12px; background: var(--highlight); padding: 2px 6px; border-radius: 3px; }
+  .rest { color: var(--muted); font-size: 12px; }
+  .rpe { display: inline-block; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 3px; }
+
+  /* ── PROGRESSIVE OVERLOAD TABLE ─────────────────────── */
+  .week-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+  }
+  .week-table thead {
+    background: var(--accent2);
+    color: var(--paper);
+  }
+  .week-table thead th {
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .week-table thead th:last-child { border-right: none; }
+  .week-table tbody tr { border-top: 1px solid var(--border); }
+  .week-table tbody tr:nth-child(even) { background: #faf8f4; }
+  .week-table tbody td {
+    padding: 9px 14px;
+    font-size: 12px;
+    border-right: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .week-table tbody td:last-child { border-right: none; }
+  .week-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--accent); }
+  .deload-row { background: #f0e8d8 !important; }
+  .deload-badge { background: var(--accent); color: white; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 1px; vertical-align: middle; margin-left: 6px; }
+
+  /* ── PAGE BREAK UTIL ────────────────────────────────── */
+  .page-break { page-break-before: always; }
+
+  /* ── DIVIDER ────────────────────────────────────────── */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* ── PRINT ──────────────────────────────────────────── */
+  @media print {
+    body { background: white; }
+    .cover { min-height: auto; padding: 48px; page-break-after: always; }
+    .page { padding: 40px 48px; }
+    .page-break { page-break-before: always; }
+    .session-block { page-break-inside: avoid; }
+    @page { margin: 0.5cm; size: A4; }
+  }
+
+  /* ── UTILITY ────────────────────────────────────────── */
+  .tag { display: inline-block; background: var(--tag-bg); color: var(--tag-txt); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-right: 6px; margin-bottom: 4px; }
+  .tag.red { background: var(--accent); }
+  ul.checklist { list-style: none; padding: 0; }
+  ul.checklist li { padding: 5px 0 5px 20px; position: relative; font-size: 12px; border-bottom: 1px solid var(--border); }
+  ul.checklist li::before { content: '✓'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .label-row { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div>
+    <div class="cover-label">Elite Strength & Hypertrophy · Natural Athlete Protocol</div>
+    <div class="cover-title">12<span>-</span>WEEK<br>DUMBBELL<br>PROGRAMME</div>
+    <div class="cover-sub">Periodised for muscle growth & raw strength</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item"><strong>3</strong><span>Days / Week</span></div>
+      <div class="cover-meta-item"><strong>45</strong><span>Min / Session</span></div>
+      <div class="cover-meta-item"><strong>3</strong><span>Phases</span></div>
+      <div class="cover-meta-item"><strong>2</strong><span>Deload Weeks</span></div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-stats">
+      <div class="cover-stat"><strong>Male · 45 yrs</strong>Athlete Profile</div>
+      <div class="cover-stat"><strong>92 kg · 195 cm</strong>Bodyweight / Height</div>
+      <div class="cover-stat"><strong>12 kg DB × 10</strong>Baseline Working Load</div>
+      <div class="cover-stat"><strong>Dumbbells Only</strong>Equipment</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 1: OVERVIEW -->
+<div class="page">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title">Programme Philosophy & Periodisation</div>
+  </div>
+
+  <p>This programme uses <strong>Linear-to-Undulating Block Periodisation</strong> — the most effective evidence-based model for an intermediate natural athlete whose primary goal is hypertrophy with concurrent strength development. Rather than changing rep ranges randomly, we deliberately manipulate volume, intensity, and exercise variation across three structured 4-week blocks.</p>
+
+  <div class="callout">
+    <strong>Why this model for you</strong>
+    At 45, testosterone and recovery capacity are meaningfully different from a 25-year-old. This means we need to be smarter about fatigue management. Block periodisation lets us accumulate volume during accumulation phases and then "cash in" that adaptation during intensification phases — with strategic deloads to allow full supercompensation. You will make faster, more durable progress than with a generic programme.
+  </div>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <span class="phase-label">Weeks 1–4</span>
+        <div class="phase-name">Phase 1: Foundation</div>
+      </div>
+      <div class="phase-card-body">
+        <div class="meta-row"><span class="meta-key">Focus</span><span class="meta-val">Volume & Motor Learning</span></div>
+        <div class="meta-row"><span class="meta-key">Rep Range</span><span class="meta-val">12–15 reps</span></div>
+        <div class="meta-row"><span class="meta-key">Sets/Exercise</span><span class="meta-val">3 sets</span></div>
+        <div class="meta-row"><span class="meta-key">Intensity</span><span class="meta-val">RPE 6–7</span></div>
+        <div class="meta-row"><span class="meta-key">Deload</span><span class="meta-val">Week 4</span></div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <span class="phase-label">Weeks 5–8</span>
+        <div class="phase-name">Phase 2: Hypertrophy</div>
+      </div>
+      <div class="phase-card-body">
+        <div class="meta-row"><span class="meta-key">Focus</span><span class="meta-val">Muscle Growth</span></div>
+        <div class="meta-row"><span class="meta-key">Rep Range</span><span class="meta-val">8–12 reps</span></div>
+        <div class="meta-row"><span class="meta-key">Sets/Exercise</span><span class="meta-val">3–4 sets</span></div>
+        <div class="meta-row"><span class="meta-key">Intensity</span><span class="meta-val">RPE 7–8</span></div>
+        <div class="meta-row"><span class="meta-key">Deload</span><span class="meta-val">Week 8</span></div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <span class="phase-label">Weeks 9–12</span>
+        <div class="phase-name">Phase 3: Intensification</div>
+      </div>
+      <div class="phase-card-body">
+        <div class="meta-row"><span class="meta-key">Focus</span><span class="meta-val">Strength & Density</span></div>
+        <div class="meta-row"><span class="meta-key">Rep Range</span><span class="meta-val">6–8 reps</span></div>
+        <div class="meta-row"><span class="meta-key">Sets/Exercise</span><span class="meta-val">4 sets</span></div>
+        <div class="meta-row"><span class="meta-key">Intensity</span><span class="meta-val">RPE 8–9</span></div>
+        <div class="meta-row"><span class="meta-key">Deload</span><span class="meta-val">After Week 12</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Training Split Rationale</h2>
+  <p>With 3 days and 45-minute sessions, a <strong>Push / Pull / Legs (PPL)</strong> split run on a rotating basis is optimal. Each muscle group is trained with sufficient volume (~10–14 sets/week) while allowing 48–72 hours recovery between sessions — critical for a 45-year-old natural athlete. This also means each workout has a clear primary stimulus with no overlap in fatigue patterns.</p>
+
+  <div class="split-grid">
+    <div class="split-card">
+      <div class="split-card-head">
+        <div class="day">Session A</div>
+        <div class="session">Push</div>
+      </div>
+      <div class="split-card-body">
+        <ul>
+          <li>Chest (primary)</li>
+          <li>Shoulders (secondary)</li>
+          <li>Triceps (tertiary)</li>
+          <li>Core (ancillary)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="split-card">
+      <div class="split-card-head">
+        <div class="day">Session B</div>
+        <div class="session">Pull</div>
+      </div>
+      <div class="split-card-body">
+        <ul>
+          <li>Back / Lats (primary)</li>
+          <li>Rear delts (secondary)</li>
+          <li>Biceps (tertiary)</li>
+          <li>Grip / Core (ancillary)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="split-card">
+      <div class="split-card-head">
+        <div class="day">Session C</div>
+        <div class="session">Legs + Core</div>
+      </div>
+      <div class="split-card-body">
+        <ul>
+          <li>Quads (primary)</li>
+          <li>Hamstrings / Glutes (secondary)</li>
+          <li>Calves (tertiary)</li>
+          <li>Anti-rotation core</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout-dark">
+    <strong>Weekly Schedule</strong>
+    <p>Train on non-consecutive days where possible. Example: Monday (Push) · Wednesday (Pull) · Friday (Legs). The sessions rotate — Week 1 starts Push, Week 2 the first session of the week is Pull, etc. This ensures all sessions receive equal frequency across the programme.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 2: SESSIONS -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Session A — Push (Chest · Shoulders · Triceps)</div>
+  </div>
+
+  <!-- PHASE 1 PUSH -->
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 1</div>
+      <div class="session-name">Push — Weeks 1–3 (Foundation)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~40 min</span> &nbsp;|&nbsp; Total Sets: <span>15</span> &nbsp;|&nbsp; Target RPE: <span>6–7</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr>
+          <th style="width:28%">Exercise</th>
+          <th>Sets × Reps</th>
+          <th>Tempo</th>
+          <th>Rest</th>
+          <th>Notes / Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Floor Press</div><div class="ex-note">Chest primary · Triceps</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">3-1-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Floor press limits shoulder range — safer on rotator cuff at 45. Builds chest & triceps with controlled eccentric. Start 10 kg DBs.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Seated Shoulder Press</div><div class="ex-note">Anterior/Medial Delt</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">3-1-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Compound shoulder builder. Seated stabilises the spine. Neutral grip reduces impingement risk. Start 8–10 kg DBs.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Lateral Raise</div><div class="ex-note">Medial Deltoid</div></td>
+          <td><div class="sets-reps">3 × 15</div></td>
+          <td><span class="tempo">2-0-2-1</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Isolation for shoulder width. The medial delt responds well to higher reps. Use 6–8 kg; focus on form over load. Pause at top.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Overhead Tricep Extension</div><div class="ex-note">Long head Triceps</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">3-0-2-0</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Long head stretch under load = superior hypertrophy. Use one DB held with both hands or single arm. Start 8–10 kg.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Dead Bug</div><div class="ex-note">Anti-extension core</div></td>
+          <td><div class="sets-reps">3 × 10 / side</div></td>
+          <td><span class="tempo">Controlled</span></td>
+          <td><span class="rest">45 s</span></td>
+          <td>Core stability with no spinal compression. Critical for posture and injury prevention in a 45-year-old lifter. Bodyweight only.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASE 2 PUSH -->
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 2</div>
+      <div class="session-name">Push — Weeks 5–7 (Hypertrophy)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~42 min</span> &nbsp;|&nbsp; Total Sets: <span>16</span> &nbsp;|&nbsp; Target RPE: <span>7–8</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr>
+          <th style="width:28%">Exercise</th>
+          <th>Sets × Reps</th>
+          <th>Tempo</th>
+          <th>Rest</th>
+          <th>Notes / Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Floor Press</div><div class="ex-note">Chest primary · Triceps</div></td>
+          <td><div class="sets-reps">4 × 8–10</div></td>
+          <td><span class="tempo">3-1-2-0</span></td>
+          <td><span class="rest">2 min</span></td>
+          <td>Add set, reduce reps, increase load. Aim for 12 kg by week 5–6. Focus on chest contraction at top.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Incline Press (pillows/bench)</div><div class="ex-note">Upper Chest / Anterior Delt</div></td>
+          <td><div class="sets-reps">3 × 10–12</div></td>
+          <td><span class="tempo">3-0-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>New exercise introduced to add upper chest stimulus and variation. Even 30° incline from floor significantly changes recruitment.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Lateral Raise</div><div class="ex-note">Medial Deltoid</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">2-0-2-1</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Increase to 8–10 kg if 12 kg was manageable. Control the negative.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Tricep Kickback (superset)</div><div class="ex-note">Tricep isolation</div></td>
+          <td><div class="sets-reps">3 × 12</div></td>
+          <td><span class="tempo">2-1-2-0</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Superset with lateral raise to save time. Peak contraction focus. Elbow stays high and fixed.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Plank with Shoulder Tap</div><div class="ex-note">Anti-rotation core</div></td>
+          <td><div class="sets-reps">3 × 12 / side</div></td>
+          <td><span class="tempo">Controlled</span></td>
+          <td><span class="rest">45 s</span></td>
+          <td>Progresssion from dead bug. Anti-rotation demands increase. Hips must stay level.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PHASE 3 PUSH -->
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 3</div>
+      <div class="session-name">Push — Weeks 9–12 (Intensification)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~44 min</span> &nbsp;|&nbsp; Total Sets: <span>16</span> &nbsp;|&nbsp; Target RPE: <span>8–9</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr>
+          <th style="width:28%">Exercise</th>
+          <th>Sets × Reps</th>
+          <th>Tempo</th>
+          <th>Rest</th>
+          <th>Notes / Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Floor Press</div><div class="ex-note">Chest / Triceps — Strength focus</div></td>
+          <td><div class="sets-reps">4 × 6–8</div></td>
+          <td><span class="tempo">3-2-1-0</span></td>
+          <td><span class="rest">2.5 min</span></td>
+          <td>Heavier loads, longer pause at bottom, explosive press. Aim 12–14 kg. Leave 1–2 reps in tank.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Push Press</div><div class="ex-note">Anterior Delt / Triceps / Power</div></td>
+          <td><div class="sets-reps">4 × 6</div></td>
+          <td><span class="tempo">X-0-3-0</span></td>
+          <td><span class="rest">2 min</span></td>
+          <td>Leg drive makes this a power movement. Trains rate of force development and shoulder strength. New stimulus in Phase 3.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Lateral Raise (2-second hold)</div><div class="ex-note">Medial Deltoid</div></td>
+          <td><div class="sets-reps">3 × 10</div></td>
+          <td><span class="tempo">2-2-2-0</span></td>
+          <td><span class="rest">75 s</span></td>
+          <td>Isometric hold at peak increases time under tension dramatically on a muscle that plateaus easily.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Close-Grip DB Floor Press</div><div class="ex-note">Tricep dominant press</div></td>
+          <td><div class="sets-reps">3 × 8</div></td>
+          <td><span class="tempo">3-1-1-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Shifts emphasis to triceps. Elbows close to torso, DBs touching. Heavier relative load possible.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Hollow Body Hold</div><div class="ex-note">Full anterior chain</div></td>
+          <td><div class="sets-reps">3 × 30 s</div></td>
+          <td><span class="tempo">Isometric</span></td>
+          <td><span class="rest">45 s</span></td>
+          <td>Gymnastics staple. Maximal anterior chain tension. Progression from plank tap. Lower back flat, lumbar imprinted to floor.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SESSION B PULL -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Session B — Pull (Back · Rear Delts · Biceps)</div>
+  </div>
+
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 1</div>
+      <div class="session-name">Pull — Weeks 1–3 (Foundation)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~38 min</span> &nbsp;|&nbsp; Total Sets: <span>15</span> &nbsp;|&nbsp; Target RPE: <span>6–7</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr><th style="width:28%">Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes / Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Bent-Over Row</div><div class="ex-note">Lats · Mid-back · Biceps</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">2-0-3-1</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>The cornerstone back movement. Drive elbow back, not up. Slow 3-second squeeze at top. Start 10–12 kg. Bilateral for max load.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Single-Arm Row</div><div class="ex-note">Lat · Rhomboid — Unilateral</div></td>
+          <td><div class="sets-reps">3 × 12 / side</div></td>
+          <td><span class="tempo">2-1-3-0</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Corrects left-right imbalances. Allows heavier relative loads. Knee on bench or use hip-hinge stance. Lead with elbow.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Rear Delt Fly (prone)</div><div class="ex-note">Rear Deltoid · Lower Traps</div></td>
+          <td><div class="sets-reps">3 × 15</div></td>
+          <td><span class="tempo">2-1-2-1</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Lie face down on a bench or bed edge. Critical for posture correction and shoulder health — especially important at 45. Use 4–6 kg.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Hammer Curl</div><div class="ex-note">Brachialis · Brachioradialis</div></td>
+          <td><div class="sets-reps">3 × 12</div></td>
+          <td><span class="tempo">2-0-3-1</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Neutral grip builds the brachialis (under bicep) for arm thickness. Also trains forearm. Start 8–10 kg alternating.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Farmer's Carry / Hold</div><div class="ex-note">Grip · Core · Traps</div></td>
+          <td><div class="sets-reps">3 × 30 s</div></td>
+          <td><span class="tempo">Walk or static hold</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Often neglected. Builds grip, upper trap, and core stability simultaneously. Use heaviest DBs you can hold. Walk 10 m or stand still.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 2</div>
+      <div class="session-name">Pull — Weeks 5–7 (Hypertrophy)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~42 min</span> &nbsp;|&nbsp; Total Sets: <span>16</span> &nbsp;|&nbsp; Target RPE: <span>7–8</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr><th style="width:28%">Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes / Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Bent-Over Row (heavier)</div><div class="ex-note">Lats · Mid-back</div></td>
+          <td><div class="sets-reps">4 × 8–10</div></td>
+          <td><span class="tempo">2-1-3-1</span></td>
+          <td><span class="rest">2 min</span></td>
+          <td>Extra set, higher load. Should be at or near 12 kg by now. Aim for 2 reps short of failure on last set.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Chest-Supported DB Row</div><div class="ex-note">Mid-back · Rhomboids — Stricter form</div></td>
+          <td><div class="sets-reps">3 × 10–12</div></td>
+          <td><span class="tempo">2-1-3-1</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Lie chest-down on incline bench (or stacked books). Eliminates lower back load. Superior mid-back isolation vs free-standing rows.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Rear Delt Fly (prone)</div><div class="ex-note">Rear Delt · Postural</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">2-2-2-0</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Hold at top for 2 seconds. Increase to 6–8 kg if form is solid. Shoulder health: non-negotiable.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Supinated Curl (superset)</div><div class="ex-note">Biceps Brachii — Peak</div></td>
+          <td><div class="sets-reps">3 × 10–12</div></td>
+          <td><span class="tempo">2-1-3-0</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Superset with rear delt fly. Classic full-range bicep curl. Supinate (rotate outward) at top for full contraction. 8–10 kg.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Farmer's Carry</div><div class="ex-note">Grip · Core · Conditioning</div></td>
+          <td><div class="sets-reps">3 × 40 s</div></td>
+          <td><span class="tempo">Walk</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Increase duration by 10 seconds from Phase 1. Max load you can maintain upright posture.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 3</div>
+      <div class="session-name">Pull — Weeks 9–12 (Intensification)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~44 min</span> &nbsp;|&nbsp; Total Sets: <span>16</span> &nbsp;|&nbsp; Target RPE: <span>8–9</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr><th style="width:28%">Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes / Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Pendlay-Style Row (explosive)</div><div class="ex-note">Lats · Power</div></td>
+          <td><div class="sets-reps">4 × 6–8</div></td>
+          <td><span class="tempo">1-0-X-1</span></td>
+          <td><span class="rest">2.5 min</span></td>
+          <td>Start each rep from a dead stop (reset on floor). Explosive pull teaches rate of force development — the strength goal. 12 kg+.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Chest-Supported DB Row (heavy)</div><div class="ex-note">Mid-back — Strength</div></td>
+          <td><div class="sets-reps">4 × 6–8</div></td>
+          <td><span class="tempo">2-2-1-0</span></td>
+          <td><span class="rest">2 min</span></td>
+          <td>Load as heavy as possible with strict form. 2-second pause at top. Full back activation without lower back fatigue.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Rear Delt Fly + Band Pull-Apart</div><div class="ex-note">Rear Delt — Superset</div></td>
+          <td><div class="sets-reps">3 × 10 + 15</div></td>
+          <td><span class="tempo">Controlled</span></td>
+          <td><span class="rest">75 s</span></td>
+          <td>If no bands, do 20 reps fly. The superset creates a massive pump and fatigue in posterior chain. Shoulder armour.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Incline Curl (lengthened position)</div><div class="ex-note">Biceps — Long head stretch</div></td>
+          <td><div class="sets-reps">3 × 8–10</div></td>
+          <td><span class="tempo">3-0-2-1</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Sit back on incline with arms behind torso. Maximum bicep stretch = superior hypertrophy signal. 8–10 kg. This will be humbling.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Farmer's Carry (max weight)</div><div class="ex-note">Grip · Total body</div></td>
+          <td><div class="sets-reps">3 × 50 s</div></td>
+          <td><span class="tempo">Walk</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Max load. Grip is now the limiting factor — good. Forearm hypertrophy and grip carryover to all pulling movements.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SESSION C LEGS -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Session C — Legs + Core</div>
+  </div>
+
+  <div class="callout">
+    <strong>A note on legs with dumbbells at 92 kg bodyweight</strong>
+    At your bodyweight, the lower body is already accustomed to moving significant load. The goal here is not to replicate a barbell squat but to use time under tension, unilateral work, and hip-hinge patterns to create genuine leg stimulus. A 12 kg DB is light for bilateral squats — so we'll use single-leg variations and tempo manipulation to make this challenging and effective.
+  </div>
+
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 1</div>
+      <div class="session-name">Legs + Core — Weeks 1–3 (Foundation)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~40 min</span> &nbsp;|&nbsp; Total Sets: <span>15</span> &nbsp;|&nbsp; Target RPE: <span>6–7</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr><th style="width:28%">Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes / Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Goblet Squat</div><div class="ex-note">Quads · Glutes · Core</div></td>
+          <td><div class="sets-reps">3 × 12–15</div></td>
+          <td><span class="tempo">4-1-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>4-second eccentric makes this challenging with 12 kg. Excellent quad isolation. Hold DB at chest, sit deep, knees track toes. Feel the burn.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Romanian Deadlift</div><div class="ex-note">Hamstrings · Glutes · Lower back</div></td>
+          <td><div class="sets-reps">3 × 12</div></td>
+          <td><span class="tempo">3-1-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Hip-hinge pattern. Hold both DBs. Slight knee bend, push hips back, feel hamstring stretch. Strongest hip hinge movement available with DBs.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Reverse Lunge</div><div class="ex-note">Quads · Glutes — Unilateral</div></td>
+          <td><div class="sets-reps">3 × 10 / leg</div></td>
+          <td><span class="tempo">3-0-2-0</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Reverse lunge is lower-impact on knees than forward lunge. One DB in each hand. Controlled knee tracking. Great single-leg motor pattern.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Calf Raise (standing)</div><div class="ex-note">Gastrocnemius · Soleus</div></td>
+          <td><div class="sets-reps">3 × 20</div></td>
+          <td><span class="tempo">2-1-2-2</span></td>
+          <td><span class="rest">45 s</span></td>
+          <td>Calves need high reps and full range. Hold DBs for load. Pause 2 seconds at bottom for soleus stretch. Use a step for extra range if available.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">Pallof Press (with DB or static)</div><div class="ex-note">Anti-rotation core</div></td>
+          <td><div class="sets-reps">3 × 10 / side</div></td>
+          <td><span class="tempo">Controlled</span></td>
+          <td><span class="rest">45 s</span></td>
+          <td>If no cable, hold a single DB at chest and slowly extend arms forward, resisting rotation. Obliques, transverse abdominis. Functional and underrated.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 2</div>
+      <div class="session-name">Legs + Core — Weeks 5–7 (Hypertrophy)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~42 min</span> &nbsp;|&nbsp; Total Sets: <span>16</span> &nbsp;|&nbsp; Target RPE: <span>7–8</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr><th style="width:28%">Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes / Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Bulgarian Split Squat</div><div class="ex-note">Quads · Glutes — Primary</div></td>
+          <td><div class="sets-reps">4 × 8–10 / leg</div></td>
+          <td><span class="tempo">4-1-2-0</span></td>
+          <td><span class="rest">2 min</span></td>
+          <td>The single best dumbbell leg exercise. Rear foot elevated on chair or sofa. Front leg does all the work. 12 kg DBs will be very challenging here.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Romanian Deadlift (single-leg)</div><div class="ex-note">Hamstrings · Glutes — Unilateral</div></td>
+          <td><div class="sets-reps">3 × 10 / leg</div></td>
+          <td><span class="tempo">3-1-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Massive balance and stability demand. Reveals and corrects asymmetries. Hip-hinge with single leg. Hold opposite DB to working leg.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Goblet Squat (pause at bottom)</div><div class="ex-note">Quads — Lengthened emphasis</div></td>
+          <td><div class="sets-reps">3 × 10</div></td>
+          <td><span class="tempo">3-3-2-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>3-second pause in hole. Increases time under tension enormously. Removes stretch reflex = more muscular demand. Brutal with 12 kg.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Calf Raise (single-leg)</div><div class="ex-note">Gastrocnemius — Unilateral</div></td>
+          <td><div class="sets-reps">3 × 15 / leg</div></td>
+          <td><span class="tempo">2-1-2-2</span></td>
+          <td><span class="rest">45 s</span></td>
+          <td>Doubles the load per calf vs bilateral. Hold one DB. Free hand on wall for balance only. Heel hangs off step if available.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Suitcase Carry + Lunge</div><div class="ex-note">Lateral core · Glutes</div></td>
+          <td><div class="sets-reps">3 × 8 / side</div></td>
+          <td><span class="tempo">Controlled</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Hold DB on one side only, resist lateral lean. Step-lunge forward. Oblique and QL anti-lateral challenge. Integrates core + legs.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="session-block">
+    <div class="session-title-bar">
+      <div class="session-tag">Phase 3</div>
+      <div class="session-name">Legs + Core — Weeks 9–12 (Intensification)</div>
+    </div>
+    <div class="session-meta-bar">
+      Duration: <span>~44 min</span> &nbsp;|&nbsp; Total Sets: <span>16</span> &nbsp;|&nbsp; Target RPE: <span>8–9</span>
+    </div>
+    <table class="ex-table">
+      <thead>
+        <tr><th style="width:28%">Exercise</th><th>Sets × Reps</th><th>Tempo</th><th>Rest</th><th>Notes / Why</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><div class="ex-name">DB Bulgarian Split Squat (heavy)</div><div class="ex-note">Quad · Glute — Strength</div></td>
+          <td><div class="sets-reps">4 × 6–8 / leg</div></td>
+          <td><span class="tempo">3-2-1-0</span></td>
+          <td><span class="rest">2.5 min</span></td>
+          <td>Max load. Aim to outperform Phase 2 weights. 2-second pause at bottom of each rep. This is your primary leg strength indicator.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Sumo Deadlift</div><div class="ex-note">Glutes · Adductors · Hamstrings</div></td>
+          <td><div class="sets-reps">4 × 6–8</div></td>
+          <td><span class="tempo">3-1-2-0</span></td>
+          <td><span class="rest">2 min</span></td>
+          <td>Wide stance, toes out, single heavy DB held vertically between legs. Maximum load possible in a hip-hinge pattern with DBs. Glute and adductor dominant.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Step-Up (explosive)</div><div class="ex-note">Quads · Glutes — Power</div></td>
+          <td><div class="sets-reps">3 × 8 / leg</div></td>
+          <td><span class="tempo">X-0-3-0</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>Drive up explosively, control the lowering. Knee height step or sturdy chair. Develops power and unilateral stability. New stimulus Phase 3.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Calf Raise (single-leg, loaded)</div><div class="ex-note">Calves — Strength endurance</div></td>
+          <td><div class="sets-reps">3 × 12 / leg</div></td>
+          <td><span class="tempo">2-2-2-2</span></td>
+          <td><span class="rest">60 s</span></td>
+          <td>Max load. 2-second pause top and bottom. No bouncing. Full range of motion. Final calf progression.</td>
+        </tr>
+        <tr>
+          <td><div class="ex-name">DB Turkish Get-Up</div><div class="ex-note">Total integration · Core</div></td>
+          <td><div class="sets-reps">3 × 3 / side</div></td>
+          <td><span class="tempo">Slow and deliberate</span></td>
+          <td><span class="rest">90 s</span></td>
+          <td>The ultimate full-body finisher. Floor to standing with one DB held overhead. Tests shoulder stability, hip mobility, and full-body co-ordination. Start light (6–8 kg).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 3: PROGRESSIVE OVERLOAD -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title">Week-by-Week Progressive Overload Strategy</div>
+  </div>
+
+  <p>Progressive overload is the non-negotiable driver of adaptation. With fixed dumbbell weights (no microplates), we use <strong>rep progression and tempo manipulation first, then load jumps when rep targets are consistently exceeded</strong>. The hierarchy is: <em>Add reps → Add sets → Slow tempo → Increase load</em>.</p>
+
+  <div class="callout-dark">
+    <strong>The Double Progression Rule</strong>
+    <p>On any given exercise, once you can complete the top end of the rep range for ALL sets with good form and leave 2+ reps in the tank, you increase the weight at the next session. Example: If the target is 3×10–12 and you hit 12, 12, 11 — move up next session. If you hit 10, 9, 8 — stay at this weight and add reps first.</p>
+  </div>
+
+  <table class="week-table">
+    <thead>
+      <tr>
+        <th>Week</th>
+        <th>Phase</th>
+        <th>Volume / Intensity Focus</th>
+        <th>Overload Mechanism</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="week-num">1</div></td>
+        <td>Foundation</td>
+        <td>3 × 12–15 · RPE 6</td>
+        <td>Learn movement patterns. No overload attempt yet.</td>
+        <td>Technique priority. Record weights used. How many reps left in tank?</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">2</div></td>
+        <td>Foundation</td>
+        <td>3 × 12–15 · RPE 6–7</td>
+        <td>Add 1–2 reps per set vs Week 1 if form is solid.</td>
+        <td>First week of real progression. Aim to hit top of rep range on all sets.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">3</div></td>
+        <td>Foundation</td>
+        <td>3 × 12–15 · RPE 7</td>
+        <td>Slow eccentric by 1 second on compound lifts. Add load on any exercise where 15 reps was easy.</td>
+        <td>Most people see first load increase here. Don't rush — form over ego.</td>
+      </tr>
+      <tr class="deload-row">
+        <td><div class="week-num">4</div></td>
+        <td>DELOAD <span class="deload-badge">Deload</span></td>
+        <td>2 × 10 · RPE 5</td>
+        <td>Reduce sets by 1. Keep same load. No maximal effort.</td>
+        <td>Active recovery. Maintain movement patterns. Sleep, eat, recover.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">5</div></td>
+        <td>Hypertrophy</td>
+        <td>3–4 × 8–12 · RPE 7</td>
+        <td>Rep range drops — load should increase. Start heavier than Phase 1.</td>
+        <td>First week of new phase. Establish new baseline loads for 8–12 range.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">6</div></td>
+        <td>Hypertrophy</td>
+        <td>4 × 8–12 · RPE 7–8</td>
+        <td>Add 4th set to primary compounds. Increase weight on any lift where you hit 12+ easily.</td>
+        <td>Volume peak of the programme. Expect fatigue — this is normal and productive.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">7</div></td>
+        <td>Hypertrophy</td>
+        <td>4 × 8–12 · RPE 8</td>
+        <td>Aim to beat Week 6 by 1–2 reps or 2 kg on at least one lift per session.</td>
+        <td>Hardest regular week. Do not skip. This is where adaptation happens.</td>
+      </tr>
+      <tr class="deload-row">
+        <td><div class="week-num">8</div></td>
+        <td>DELOAD <span class="deload-badge">Deload</span></td>
+        <td>2 × 8 · RPE 5</td>
+        <td>50% volume. Same or reduced load. Focus on quality movement only.</td>
+        <td>Your body consolidates gains here. Do not skip this — it is part of the programme.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">9</div></td>
+        <td>Intensification</td>
+        <td>4 × 6–8 · RPE 8</td>
+        <td>Load increase is the primary driver. Use max DB available. Slow down tempo.</td>
+        <td>New phase, new exercises, new challenge. Lower reps feel heavy — that is the intent.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">10</div></td>
+        <td>Intensification</td>
+        <td>4 × 6–8 · RPE 8–9</td>
+        <td>Add reps vs Week 9. If at top of range (8), increase load next session.</td>
+        <td>Strength emphasis builds. Rest fully between sets. Quality over speed.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">11</div></td>
+        <td>Intensification</td>
+        <td>4 × 6–8 · RPE 9</td>
+        <td>Last heavy week. Push load on all primary lifts. Record PRs.</td>
+        <td>This is your peak training week. You should feel strong from the deload. Set personal bests.</td>
+      </tr>
+      <tr>
+        <td><div class="week-num">12</div></td>
+        <td>Intensification</td>
+        <td>4 × 5–6 · RPE 9</td>
+        <td>Maintain Phase 3 loads. Drop reps slightly. Final accumulation.</td>
+        <td>Programme complete. Deload after this week. Reassess starting loads for next cycle (+5–10%).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Tempo Guide</h2>
+  <p>Tempo is written as <strong>Eccentric – Pause at bottom – Concentric – Pause at top</strong>. "X" = explosive. Example: <span style="font-family:monospace; background:var(--highlight); padding:2px 6px; border-radius:3px;">3-1-2-0</span> means 3 seconds lowering, 1 second pause, 2 seconds lifting, 0 pause at top.</p>
+
+  <div class="two-col" style="margin-top: 16px;">
+    <div>
+      <div class="label-row">Phase 1 — Foundation</div>
+      <p>Slower eccentrics (3–4 sec) to maximise time under tension with lighter loads. This makes 12 kg feel genuinely challenging.</p>
+    </div>
+    <div>
+      <div class="label-row">Phase 3 — Intensification</div>
+      <p>Explosive concentrics (X) on power movements (push press, step-up) to develop rate of force development — the neural strength adaptation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ SECTION 4: DELOADS + NOTES -->
+<div class="page page-break">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title">Deload Protocol & Recovery Guidelines</div>
+  </div>
+
+  <h2>When to Deload</h2>
+  <p>Planned deloads occur at <strong>Week 4</strong> and <strong>Week 8</strong>. A third deload is recommended after Week 12 before beginning a new training cycle. Additionally, apply an <em>unplanned deload</em> any week where 2+ of the following apply:</p>
+
+  <ul class="checklist">
+    <li>You feel unusually tired going into sessions for 3+ days</li>
+    <li>Performance is declining (less reps or load vs previous week) for 2 consecutive sessions</li>
+    <li>Joints feel sore rather than muscles (especially shoulders, knees, elbows)</li>
+    <li>Sleep quality has deteriorated noticeably</li>
+    <li>You have high life stress (work, travel, illness)</li>
+  </ul>
+
+  <h2>How to Execute a Deload Week</h2>
+
+  <div class="phase-grid">
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <span class="phase-label">Volume</span>
+        <div class="phase-name">Cut by 40–50%</div>
+      </div>
+      <div class="phase-card-body">
+        <div class="meta-row"><span class="meta-key">Sets</span><span class="meta-val">2 (not 3–4)</span></div>
+        <div class="meta-row"><span class="meta-key">Reps</span><span class="meta-val">Same range</span></div>
+        <div class="meta-row"><span class="meta-key">Exercises</span><span class="meta-val">Same selection</span></div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <span class="phase-label">Intensity</span>
+        <div class="phase-name">Reduce to RPE 5</div>
+      </div>
+      <div class="phase-card-body">
+        <div class="meta-row"><span class="meta-key">Load</span><span class="meta-val">–20% from last week</span></div>
+        <div class="meta-row"><span class="meta-key">Effort</span><span class="meta-val">Never near failure</span></div>
+        <div class="meta-row"><span class="meta-key">Tempo</span><span class="meta-val">Normal (no slowing)</span></div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-card-head">
+        <span class="phase-label">Focus</span>
+        <div class="phase-name">Quality & Recovery</div>
+      </div>
+      <div class="phase-card-body">
+        <div class="meta-row"><span class="meta-key">Priority</span><span class="meta-val">Sleep 7–9 hrs</span></div>
+        <div class="meta-row"><span class="meta-key">Nutrition</span><span class="meta-val">Maintain protein</span></div>
+        <div class="meta-row"><span class="meta-key">Activity</span><span class="meta-val">Walk, stretch, swim</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <strong>Why deloads matter even more at 45</strong>
+    Research shows that natural testosterone production is meaningfully lower at 45 than at 25. This extends recovery time between hard training blocks. Skipping deloads leads to accumulated fatigue that masks fitness gains — you don't feel or perform better even as adaptation is occurring. A proper deload week allows "supercompensation" — you come back stronger than before the deload, not just recovered to baseline.
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-header" style="margin-top: 40px;">
+    <div class="section-num">05</div>
+    <div class="section-title">Nutrition & Lifestyle Anchors</div>
+  </div>
+
+  <p>Training is the stimulus. The following are the conditions that allow adaptation to actually occur. These are not optional add-ons — they are co-determinants of your results.</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Protein Target</h3>
+      <p>At 92 kg, aim for <strong>160–185 g protein per day</strong> (1.75–2.0 g/kg). This is the single most evidence-backed nutritional intervention for natural muscle building. Distribute across 3–4 meals. Leucine threshold per meal: ~30–40 g protein per sitting.</p>
+
+      <h3>Calorie Strategy</h3>
+      <p>For hypertrophy: a modest surplus of <strong>200–300 kcal above maintenance</strong>. For your stats, estimated maintenance is ~2,400–2,600 kcal. Aim for 2,600–2,900 kcal on training days. Do not aggressive bulk — at 45, excess calories preferentially go to fat, not muscle.</p>
+    </div>
+    <div>
+      <h3>Sleep</h3>
+      <p>The single most anabolic free intervention available. <strong>7–9 hours per night</strong>. Most testosterone release occurs during slow-wave sleep. Chronically sleeping under 6 hours reduces testosterone by up to 15% and doubles injury risk.</p>
+
+      <h3>Recovery Between Sessions</h3>
+      <p>Minimum <strong>48 hours</strong> between sessions training the same muscle group. Your 3-day split naturally provides this. On rest days: walk, stretch, or swim. Avoid complete inactivity — light movement improves blood flow and recovery speed.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-header" style="margin-top: 40px;">
+    <div class="section-num">06</div>
+    <div class="section-title">Post-Programme: What Comes Next</div>
+  </div>
+
+  <p>After completing Week 12, take a full deload week. Then reassess:</p>
+
+  <ul class="checklist">
+    <li>Test your heaviest dumbbell for 10 reps on each primary lift — record these as new baselines</li>
+    <li>If you've outgrown 12 kg dumbbells (likely on most exercises), invest in heavier DBs (16–20 kg range)</li>
+    <li>Run this programme again with Phase 1 starting loads set 10–15% higher than your original Week 1</li>
+    <li>After a second cycle, consider adding resistance bands or a pull-up bar to expand exercise variety</li>
+    <li>Reassess goals — by cycle 2, strength goals may warrant barbell investment</li>
+  </ul>
+
+  <div class="callout-dark">
+    <strong>Coach's Final Note</strong>
+    <p>You have everything you need to make excellent progress. The limiting factor will not be your equipment — it will be consistency and patience. Three sessions per week, done intelligently for 12 weeks, will produce more visible and measurable change than most people achieve in a year of inconsistent training. Trust the process, follow the deloads, eat your protein, and sleep. The results will come.</p>
+  </div>
+
+  <div style="margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border); text-align: center; color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase;">
+    12-Week Dumbbell Strength & Hypertrophy Programme &nbsp;·&nbsp; Male · 45yr · 92kg · 195cm &nbsp;·&nbsp; 3 Days/Week · 45 Min Sessions
+  </div>
+</div>
+
+</body>
+</html>
