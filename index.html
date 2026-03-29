@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>12-Week Programme</title>
+<style>
+/* ── RESET & BASE ─────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#0f1117;
+  --surface:#1a1d27;
+  --surface2:#242736;
+  --surface3:#2e3245;
+  --accent:#e63946;
+  --accent2:#4a90d9;
+  --green:#2ecc71;
+  --amber:#f39c12;
+  --text:#f0f2f8;
+  --text2:#8b90a8;
+  --text3:#555d7a;
+  --border:#2e3245;
+  --radius:14px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bot: env(safe-area-inset-bottom, 0px);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',sans-serif;font-size:16px;}
+button{font-family:inherit;cursor:pointer;border:none;outline:none;}
+input{font-family:inherit;outline:none;}
+
+/* ── SCREENS ──────────────────────────────────────────── */
+.screen{
+  position:fixed;inset:0;
+  padding-top:calc(var(--safe-top) + 0px);
+  padding-bottom:calc(var(--safe-bot) + 60px);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;
+}
+.screen.hidden{transform:translateX(100%);opacity:0;pointer-events:none;}
+.screen.slide-left{transform:translateX(-40%);opacity:0;pointer-events:none;}
+
+/* ── TOP NAV ──────────────────────────────────────────── */
+.topnav{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 18px 10px;
+  background:rgba(15,17,23,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  min-height:54px;
+}
+.topnav-back{
+  background:var(--surface2);border-radius:50%;
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  color:var(--text);font-size:18px;flex-shrink:0;
+}
+.topnav-title{flex:1;font-size:17px;font-weight:600;letter-spacing:-.3px;}
+.topnav-badge{
+  background:var(--accent);color:white;border-radius:20px;
+  font-size:11px;font-weight:700;padding:3px 9px;letter-spacing:.3px;
+}
+
+/* ── BOTTOM TAB BAR ────────────────────────────────────── */
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;
+  padding-bottom:var(--safe-bot);
+  display:flex;background:rgba(15,17,23,.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  z-index:999;
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  padding:10px 0 8px;gap:3px;
+  color:var(--text3);font-size:10px;font-weight:500;
+  transition:color .2s;
+}
+.tab.active{color:var(--accent);}
+.tab svg{width:22px;height:22px;}
+
+/* ── SCROLL CONTAINER ─────────────────────────────────── */
+.scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── CARDS ────────────────────────────────────────────── */
+.card{
+  background:var(--surface);border-radius:var(--radius);
+  padding:16px;margin-bottom:12px;
+  border:1px solid var(--border);
+}
+.card-sm{padding:12px;}
+.section-label{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.2px;color:var(--text3);margin:4px 0 10px;
+}
+
+/* ── HOME SCREEN ──────────────────────────────────────── */
+.home-header{
+  background:linear-gradient(135deg,#1a1d27 0%,#0f1117 100%);
+  border-radius:var(--radius);padding:22px;margin-bottom:12px;
+  border:1px solid var(--border);position:relative;overflow:hidden;
+}
+.home-header::before{
+  content:'';position:absolute;top:-30px;right:-30px;
+  width:180px;height:180px;border-radius:50%;
+  border:1.5px solid rgba(230,57,70,.2);
+}
+.home-week{font-size:13px;color:var(--text2);margin-bottom:4px;}
+.home-week span{color:var(--accent);font-weight:700;}
+.home-title{font-size:26px;font-weight:800;letter-spacing:-.5px;line-height:1.1;margin-bottom:10px;}
+.home-phase{
+  display:inline-block;background:var(--accent);color:white;
+  border-radius:20px;font-size:12px;font-weight:700;padding:4px 12px;
+}
+
+.week-progress{
+  background:var(--surface2);border-radius:8px;
+  height:6px;margin:14px 0 6px;overflow:hidden;
+}
+.week-progress-fill{
+  height:100%;background:linear-gradient(90deg,var(--accent),var(--amber));
+  border-radius:8px;transition:width .5s ease;
+}
+.week-progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);}
+
+.session-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.session-card{
+  background:var(--surface);border-radius:12px;padding:14px 10px;
+  border:1.5px solid var(--border);text-align:center;
+  transition:transform .1s,border-color .2s;
+  active{transform:scale(.96);}
+}
+.session-card.done{border-color:var(--green);background:#0d2318;}
+.session-card.active-session{border-color:var(--accent);background:#1e0c0e;}
+.session-letter{font-size:28px;font-weight:800;color:var(--text2);line-height:1;}
+.session-card.done .session-letter{color:var(--green);}
+.session-card.active-session .session-letter{color:var(--accent);}
+.session-label{font-size:10px;color:var(--text3);margin-top:3px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
+.session-check{font-size:14px;margin-top:4px;}
+
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.stat-box{background:var(--surface);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border);}
+.stat-val{font-size:22px;font-weight:800;color:var(--text);}
+.stat-key{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
+
+.start-btn{
+  width:100%;padding:18px;border-radius:var(--radius);
+  background:var(--accent);color:white;
+  font-size:17px;font-weight:700;letter-spacing:-.2px;
+  box-shadow:0 4px 20px rgba(230,57,70,.35);
+  transition:transform .1s,opacity .1s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.start-btn:active{transform:scale(.98);opacity:.9;}
+.start-btn.secondary{background:var(--surface2);color:var(--text);box-shadow:none;border:1px solid var(--border);}
+
+/* ── SESSION SCREEN ───────────────────────────────────── */
+.ex-list{display:flex;flex-direction:column;gap:0;}
+.ex-item{
+  background:var(--surface);border-radius:12px;margin-bottom:8px;
+  border:1.5px solid var(--border);overflow:hidden;
+  transition:border-color .2s;
+}
+.ex-item.active-ex{border-color:var(--accent);}
+.ex-item.done-ex{border-color:var(--green);opacity:.75;}
+
+.ex-header{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+}
+.ex-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--surface3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:var(--text2);flex-shrink:0;
+}
+.ex-item.active-ex .ex-num{background:var(--accent);color:white;}
+.ex-item.done-ex .ex-num{background:var(--green);color:white;}
+.ex-info{flex:1;min-width:0;}
+.ex-name-text{font-size:14px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ex-meta-text{font-size:11px;color:var(--text3);margin-top:1px;}
+.ex-chevron{color:var(--text3);font-size:18px;flex-shrink:0;transition:transform .2s;}
+.ex-item.expanded .ex-chevron{transform:rotate(90deg);}
+
+.ex-body{display:none;padding:0 14px 14px;}
+.ex-item.expanded .ex-body{display:block;}
+
+.ex-svg-wrap{
+  background:var(--surface2);border-radius:10px;
+  padding:8px;margin-bottom:12px;
+  display:flex;align-items:center;justify-content:center;
+}
+.ex-svg-wrap svg{width:120px;height:96px;}
+
+.ex-details-row{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px;
+}
+.ex-detail-chip{
+  background:var(--surface2);border-radius:8px;padding:8px 6px;text-align:center;
+}
+.ex-detail-val{font-size:13px;font-weight:700;color:var(--text);}
+.ex-detail-key{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-top:2px;}
+
+.coach-note{
+  background:rgba(74,144,217,.1);border-left:3px solid var(--accent2);
+  border-radius:0 8px 8px 0;padding:8px 10px;
+  font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:12px;
+}
+
+/* SET TRACKER */
+.sets-tracker{margin-bottom:10px;}
+.sets-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:8px;}
+.set-rows{display:flex;flex-direction:column;gap:6px;}
+.set-row{
+  display:grid;grid-template-columns:28px 1fr 1fr auto;
+  gap:8px;align-items:center;
+}
+.set-num-badge{
+  width:24px;height:24px;border-radius:50%;
+  background:var(--surface3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--text2);flex-shrink:0;
+}
+.set-row.set-done .set-num-badge{background:var(--green);color:white;}
+.set-input{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:8px 10px;
+  font-size:14px;color:var(--text);text-align:center;
+  width:100%;
+}
+.set-input:focus{border-color:var(--accent);}
+.set-check-btn{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--surface3);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;transition:all .15s;
+}
+.set-row.set-done .set-check-btn{background:var(--green);border-color:var(--green);}
+
+.rest-btn{
+  width:100%;padding:12px;border-radius:10px;
+  background:var(--accent2);color:white;
+  font-size:14px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+}
+.rest-btn:active{opacity:.8;}
+
+/* ── REST TIMER OVERLAY ────────────────────────────────── */
+.timer-overlay{
+  position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,.85);backdrop-filter:blur(12px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;
+  padding:40px 30px;
+}
+.timer-overlay.hidden{display:none;}
+.timer-label{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--text2);}
+.timer-circle-wrap{position:relative;width:200px;height:200px;}
+.timer-circle-bg{fill:none;stroke:var(--surface2);stroke-width:10;}
+.timer-circle-fill{
+  fill:none;stroke:var(--accent2);stroke-width:10;
+  stroke-linecap:round;
+  transform-origin:center;transform:rotate(-90deg);
+  transition:stroke-dashoffset .9s linear, stroke .3s;
+}
+.timer-center{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;
+}
+.timer-secs{font-size:56px;font-weight:800;letter-spacing:-2px;color:var(--text);}
+.timer-next{font-size:12px;color:var(--text3);}
+.timer-actions{display:flex;gap:12px;width:100%;}
+.timer-btn{
+  flex:1;padding:16px;border-radius:12px;
+  font-size:15px;font-weight:600;
+}
+.timer-btn.skip{background:var(--surface2);color:var(--text);}
+.timer-btn.add{background:var(--surface3);color:var(--text);}
+.timer-progress-bar{width:100%;height:4px;background:var(--surface2);border-radius:4px;overflow:hidden;}
+.timer-progress-fill{height:100%;background:var(--accent2);border-radius:4px;transition:width .9s linear;}
+
+/* ── HISTORY/LOG SCREEN ────────────────────────────────── */
+.week-selector{
+  display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;
+}
+.week-selector::-webkit-scrollbar{display:none;}
+.week-chip{
+  flex-shrink:0;padding:7px 14px;border-radius:20px;
+  background:var(--surface);border:1.5px solid var(--border);
+  font-size:13px;font-weight:600;color:var(--text2);
+  white-space:nowrap;
+}
+.week-chip.selected{background:var(--accent);border-color:var(--accent);color:white;}
+.week-chip.deload{border-color:var(--amber);}
+.week-chip.deload.selected{background:var(--amber);border-color:var(--amber);}
+
+.log-session-block{
+  background:var(--surface);border-radius:var(--radius);
+  border:1px solid var(--border);margin-bottom:10px;overflow:hidden;
+}
+.log-session-head{
+  padding:12px 14px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.log-session-letter{
+  font-size:20px;font-weight:800;color:var(--accent);
+  width:30px;text-align:center;
+}
+.log-session-info{flex:1;}
+.log-session-name{font-size:14px;font-weight:600;}
+.log-session-sub{font-size:11px;color:var(--text3);margin-top:1px;}
+.log-session-done{font-size:20px;}
+.log-ex-row{
+  display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;
+  padding:9px 14px;border-bottom:1px solid rgba(46,50,69,.5);font-size:13px;
+}
+.log-ex-row:last-child{border-bottom:none;}
+.log-ex-name{color:var(--text);font-weight:500;}
+.log-ex-weight{color:var(--accent2);font-weight:700;font-size:12px;}
+.log-ex-sets{color:var(--text3);font-size:12px;}
+
+/* ── PROGRESS SCREEN ──────────────────────────────────── */
+.progress-chart-wrap{
+  background:var(--surface);border-radius:var(--radius);padding:16px;
+  border:1px solid var(--border);margin-bottom:12px;
+}
+.big-ring-wrap{display:flex;justify-content:center;margin:8px 0 16px;}
+.pr-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.pr-card{
+  background:var(--surface);border-radius:12px;padding:14px;
+  border:1px solid var(--border);
+}
+.pr-exercise{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.pr-weight{font-size:24px;font-weight:800;color:var(--text);}
+.pr-weight span{font-size:13px;color:var(--text3);}
+.pr-delta{font-size:12px;font-weight:600;margin-top:2px;}
+.pr-delta.up{color:var(--green);}
+.pr-delta.same{color:var(--text3);}
+.streak-card{
+  background:linear-gradient(135deg,#1e0c0e,#0f1117);
+  border-radius:var(--radius);padding:18px;
+  border:1.5px solid var(--accent);margin-bottom:12px;
+  display:flex;align-items:center;gap:16px;
+}
+.streak-num{font-size:48px;font-weight:800;color:var(--accent);line-height:1;}
+.streak-label{font-size:14px;font-weight:600;color:var(--text);}
+.streak-sub{font-size:12px;color:var(--text3);margin-top:2px;}
+
+/* ── WEEK PICKER MODAL ────────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;z-index:1500;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(8px);
+  display:flex;align-items:flex-end;
+}
+.modal-overlay.hidden{display:none;}
+.modal-sheet{
+  width:100%;background:var(--surface);
+  border-radius:20px 20px 0 0;padding:20px 20px calc(20px + var(--safe-bot));
+  border-top:1px solid var(--border);
+}
+.modal-handle{width:36px;height:4px;background:var(--text3);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-size:17px;font-weight:700;margin-bottom:16px;}
+.modal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.modal-week-btn{
+  padding:12px 8px;border-radius:10px;
+  background:var(--surface2);border:1.5px solid var(--border);
+  font-size:13px;font-weight:600;color:var(--text2);text-align:center;
+  transition:all .15s;
+}
+.modal-week-btn.current{border-color:var(--accent);color:var(--accent);}
+.modal-week-btn.deload-wk{border-color:var(--amber);color:var(--amber);}
+.modal-week-btn.completed-wk{background:#0d2318;border-color:var(--green);color:var(--green);}
+
+/* ── UTIL ─────────────────────────────────────────────── */
+.hidden{display:none!important;}
+.row{display:flex;align-items:center;gap:10px;}
+.row-between{display:flex;align-items:center;justify-content:space-between;}
+.mt8{margin-top:8px;}
+.mt12{margin-top:12px;}
+.mt16{margin-top:16px;}
+.chip{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:11px;font-weight:700;letter-spacing:.5px;
+}
+.chip-accent{background:rgba(230,57,70,.2);color:var(--accent);}
+.chip-blue{background:rgba(74,144,217,.2);color:var(--accent2);}
+.chip-green{background:rgba(46,204,113,.15);color:var(--green);}
+.chip-amber{background:rgba(243,156,18,.15);color:var(--amber);}
+.divider{height:1px;background:var(--border);margin:12px 0;}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 1: HOME
+══════════════════════════════════════════════════════ -->
+<div class="screen" id="screen-home">
+  <div class="scroll" id="home-scroll">
+
+    <!-- Header -->
+    <div class="home-header">
+      <div class="home-week">Week <span id="home-week-num">1</span> of 12</div>
+      <div class="home-title" id="home-phase-title">Foundation</div>
+      <div class="home-phase" id="home-phase-badge">Phase 1 · RPE 6–7</div>
+      <div class="week-progress mt12">
+        <div class="week-progress-fill" id="week-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="week-progress-label">
+        <span id="wk-progress-sessions">0/3 sessions</span>
+        <span id="wk-progress-pct">0%</span>
+      </div>
+    </div>
+
+    <!-- Stats row -->
+    <div class="stat-row">
+      <div class="stat-box">
+        <div class="stat-val" id="stat-total-sessions">0</div>
+        <div class="stat-key">Sessions</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-streak">0</div>
+        <div class="stat-key">Streak</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val" id="stat-weeks-done">0</div>
+        <div class="stat-key">Wks done</div>
+      </div>
+    </div>
+
+    <!-- Session cards -->
+    <div class="section-label">This Week's Sessions</div>
+    <div class="session-grid" id="home-session-grid">
+      <!-- generated by JS -->
+    </div>
+
+    <!-- Start button -->
+    <button class="start-btn" id="home-start-btn" onclick="startNextSession()">
+      <span>▶</span> <span id="start-btn-label">Start Session A</span>
+    </button>
+    <button class="start-btn secondary mt8" onclick="showWeekPicker()">
+      📅 Change Week
+    </button>
+
+    <!-- Deload banner -->
+    <div class="card mt12 hidden" id="deload-banner" style="border-color:var(--amber);background:rgba(243,156,18,.08);">
+      <div class="row">
+        <span style="font-size:22px;">😴</span>
+        <div>
+          <div style="font-weight:700;color:var(--amber);">Deload Week</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:2px;">Reduce sets to 2, load –20%, RPE 5. Active recovery priority.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 2: SESSION
+══════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="screen-session">
+  <div class="topnav">
+    <button class="topnav-back" onclick="goHome()">‹</button>
+    <div class="topnav-title" id="session-topnav-title">Session A — Push</div>
+    <div class="topnav-badge" id="session-phase-badge">Ph.1</div>
+  </div>
+  <div class="scroll">
+    <div class="card card-sm" style="border-color:var(--accent2);background:rgba(74,144,217,.07);" id="session-info-card">
+      <div class="row-between">
+        <div>
+          <div style="font-size:13px;font-weight:700;" id="session-muscles-label">Chest · Shoulders · Triceps</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px;" id="session-spec-label">3 sets · 12–15 reps · RPE 6–7</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:22px;font-weight:800;color:var(--accent2);" id="session-ex-count">5</div>
+          <div style="font-size:10px;color:var(--text3);">exercises</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-list" id="ex-list">
+      <!-- generated by JS -->
+    </div>
+
+    <button class="start-btn mt8 hidden" id="finish-session-btn" onclick="finishSession()" style="background:var(--green);box-shadow:0 4px 20px rgba(46,204,113,.35);">
+      ✓ &nbsp; Complete Session
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 3: LOG / HISTORY
+══════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="screen-log">
+  <div class="topnav">
+    <div class="topnav-title">Session Log</div>
+  </div>
+  <div class="scroll">
+    <div class="section-label">Select Week</div>
+    <div class="week-selector" id="log-week-selector"></div>
+    <div id="log-content">
+      <!-- generated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     SCREEN 4: PROGRESS
+══════════════════════════════════════════════════════ -->
+<div class="screen hidden" id="screen-progress">
+  <div class="topnav">
+    <div class="topnav-title">Progress</div>
+  </div>
+  <div class="scroll">
+
+    <div class="streak-card" id="progress-streak-card">
+      <div class="streak-num" id="prog-streak">0</div>
+      <div>
+        <div class="streak-label">Session streak</div>
+        <div class="streak-sub" id="prog-streak-sub">Keep going!</div>
+      </div>
+    </div>
+
+    <div class="section-label">Programme Completion</div>
+    <div class="progress-chart-wrap">
+      <div class="big-ring-wrap">
+        <svg viewBox="0 0 160 160" width="160" height="160">
+          <circle cx="80" cy="80" r="68" fill="none" stroke="#2e3245" stroke-width="12"/>
+          <circle id="prog-ring" cx="80" cy="80" r="68" fill="none" stroke="#e63946" stroke-width="12"
+            stroke-linecap="round" transform="rotate(-90 80 80)"
+            stroke-dasharray="427" stroke-dashoffset="427"
+            style="transition:stroke-dashoffset .8s ease;"/>
+          <text x="80" y="74" text-anchor="middle" font-size="32" font-weight="800" fill="#f0f2f8" id="prog-pct-text">0%</text>
+          <text x="80" y="96" text-anchor="middle" font-size="13" fill="#8b90a8" id="prog-sub-text">0 / 36</text>
+        </svg>
+      </div>
+      <div class="stat-row" style="margin-bottom:0;">
+        <div class="stat-box"><div class="stat-val" id="prog-completed">0</div><div class="stat-key">Completed</div></div>
+        <div class="stat-box"><div class="stat-val" id="prog-remaining">36</div><div class="stat-key">Remaining</div></div>
+        <div class="stat-box"><div class="stat-val" id="prog-phase-done">0</div><div class="stat-key">Phase</div></div>
+      </div>
+    </div>
+
+    <div class="section-label">Personal Records (Best Weight Used)</div>
+    <div class="pr-grid" id="pr-grid">
+      <!-- generated by JS -->
+    </div>
+
+    <div class="section-label">Weekly Volume</div>
+    <div class="card">
+      <svg id="volume-chart" viewBox="0 0 300 100" width="100%" style="display:block;"></svg>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     REST TIMER OVERLAY
+══════════════════════════════════════════════════════ -->
+<div class="timer-overlay hidden" id="timer-overlay">
+  <div class="timer-label">Rest Timer</div>
+  <div class="timer-circle-wrap">
+    <svg viewBox="0 0 200 200" width="200" height="200" style="position:absolute;inset:0;">
+      <circle class="timer-circle-bg" cx="100" cy="100" r="88"/>
+      <circle class="timer-circle-fill" id="timer-circle" cx="100" cy="100" r="88"
+        stroke-dasharray="553" stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-center">
+      <div class="timer-secs" id="timer-secs">90</div>
+      <div class="timer-next" id="timer-next-label">Next: —</div>
+    </div>
+  </div>
+  <div style="width:100%;">
+    <div class="timer-progress-bar"><div class="timer-progress-fill" id="timer-prog-fill" style="width:100%"></div></div>
+  </div>
+  <div class="timer-actions">
+    <button class="timer-btn add" onclick="addTimerSeconds(30)">+30s</button>
+    <button class="timer-btn skip" onclick="skipTimer()">Skip →</button>
+  </div>
+  <div style="font-size:12px;color:var(--text3);">Tap anywhere else to dismiss</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     WEEK PICKER MODAL
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay hidden" id="week-picker-modal" onclick="closeWeekPicker(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Select Week</div>
+    <div class="modal-grid" id="week-picker-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     BOTTOM TAB BAR
+══════════════════════════════════════════════════════ -->
+<div class="tabbar">
+  <button class="tab active" id="tab-home" onclick="switchTab('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    Home
+  </button>
+  <button class="tab" id="tab-session" onclick="switchTab('session')" style="display:none;" id="tab-session">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+    Session
+  </button>
+  <button class="tab" id="tab-log" onclick="switchTab('log')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+    Log
+  </button>
+  <button class="tab" id="tab-progress" onclick="switchTab('progress')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    Progress
+  </button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════════════════════════
+
+const PROGRAMME = {"phases":[{"id":1,"name":"Foundation","weeks":"1–3","repRange":"12–15","rpe":"6–7","sets":3},{"id":2,"name":"Hypertrophy","weeks":"5–7","repRange":"8–12","rpe":"7–8","sets":4},{"id":3,"name":"Intensification","weeks":"9–12","repRange":"6–8","rpe":"8–9","sets":4}],"sessions":[{"id":"A","name":"Push","muscles":"Chest · Shoulders · Triceps","phases":[{"phase":1,"exercises":[["floor_press","DB Floor Press","Chest · Triceps","3","12–15","3-1-2-0",90,"Floor press — safer on rotator cuff. Arms: elbows 45° from body, lower to floor, press up. Start 10 kg."],["seated_shoulder_press","DB Seated Shoulder Press","Anterior / Medial Delt","3","12–15","3-1-2-0",90,"Seated — spine supported. Press from shoulder height to overhead. Neutral grip. Start 8–10 kg."],["lateral_raise","DB Lateral Raise","Medial Deltoid","3","15","2-0-2-1",60,"Raise arms to sides to shoulder height. Pause 1 sec at top. Use 6–8 kg; form over load."],["overhead_tricep_ext","DB Overhead Tricep Extension","Long head Triceps","3","12–15","3-0-2-0",60,"Hold DB overhead with both hands. Bend elbows to lower DB behind head. Full stretch. 8–10 kg."],["dead_bug","Dead Bug","Anti-extension core","3","10/side","Controlled",45,"Lie on back. Opposite arm and leg extend together. Lower back stays flat on floor at all times."]]},{"phase":2,"exercises":[["floor_press","DB Floor Press","Chest · Triceps — heavier","4","8–10","3-1-2-0",120,"Extra set, heavier load. Aim 12 kg. Focus on chest contraction at top of each rep."],["incline_press","DB Incline Press (30°)","Upper Chest / Anterior Delt","3","10–12","3-0-2-0",90,"30° incline changes pec recruitment. Control the descent. Elbows track at 45°. Start 10 kg."],["lateral_raise","DB Lateral Raise","Medial Delt","3","12–15","2-0-2-1",60,"Increase to 8–10 kg. Superset with tricep kickback — go straight from one to the other."],["tricep_kickback","DB Tricep Kickback (superset)","Tricep isolation","3","12","2-1-2-0",60,"Hinge forward, upper arm parallel to floor. Extend forearm back to full lockout. Elbow fixed."],["plank_shoulder_tap","Plank with Shoulder Tap","Anti-rotation core","3","12/side","Controlled",45,"Full plank position. Tap opposite shoulder without rotating hips. Slow and controlled."]]},{"phase":3,"exercises":[["floor_press","DB Floor Press","Chest / Triceps — Strength","4","6–8","3-2-1-0",150,"Max load. 2-second pause at bottom, explosive press. Aim 12–14 kg. Leave 1–2 reps in tank."],["push_press","DB Push Press","Anterior Delt / Power","4","6","X-0-3-0",120,"Slight knee bend, drive through legs to press overhead. Explosive up, controlled lower. Heavy."],["lateral_raise","DB Lateral Raise (2 s hold)","Medial Delt","3","10","2-2-2-0",75,"2-second isometric hold at top. Dramatically increases time under tension. Shoulder width."],["close_grip_floor_press","Close-Grip DB Floor Press","Tricep-dominant press","3","8","3-1-1-0",90,"DBs touching, elbows close to torso. Shifts all emphasis to triceps. Heavier than kickback."],["hollow_body","Hollow Body Hold","Full anterior chain","3","30s","Isometric",45,"On back: press lower back to floor, raise legs and shoulders. Hold rigid. Progress from plank."]]}]},{"id":"B","name":"Pull","muscles":"Back · Rear Delts · Biceps","phases":[{"phase":1,"exercises":[["bent_over_row","DB Bent-Over Row","Lats · Mid-back · Biceps","3","12–15","2-0-3-1",90,"Hinge to ~45°. Drive elbows back — not up. 3-second squeeze at top. 10–12 kg bilateral."],["single_arm_row","DB Single-Arm Row","Lat · Rhomboid — Unilateral","3","12/side","2-1-3-0",60,"Knee and hand on bench. Lead with elbow, not hand. Pause at top. Corrects imbalances."],["rear_delt_fly","DB Rear Delt Fly (prone)","Rear Delt · Lower Traps","3","15","2-1-2-1",60,"Lie face-down on bench. Raise arms to sides with slight elbow bend. Use 4–6 kg only."],["hammer_curl","DB Hammer Curl","Brachialis · Brachioradialis","3","12","2-0-3-1",60,"Neutral grip (thumbs up). Curl alternating. Slow 3-second lower. Builds arm thickness. 8–10 kg."],["farmers_carry","DB Farmer's Carry","Grip · Core · Traps","3","30s","Walk",60,"Max weight, upright posture, walk 10 m or static hold. Builds grip and upper trap."]]},{"phase":2,"exercises":[["bent_over_row","DB Bent-Over Row (heavier)","Lats · Mid-back","4","8–10","2-1-3-1",120,"4 sets now. Should be at 12 kg. 2 reps short of failure on last set. Elbows tight."],["chest_supported_row","Chest-Supported DB Row","Mid-back · Rhomboids","3","10–12","2-1-3-1",90,"Lie chest-down on incline bench. Eliminates lower back fatigue. Superior mid-back isolation."],["rear_delt_fly","DB Rear Delt Fly (prone)","Rear Delt · Postural","3","12–15","2-2-2-0",60,"2-second hold at top. Increase to 6–8 kg. Superset with bicep curl (next exercise)."],["supinated_curl","DB Supinated Curl (superset)","Biceps Brachii — Peak","3","10–12","2-1-3-0",60,"Full range. Rotate (supinate) at top for peak contraction. 8–10 kg. Go after rear delt fly."],["farmers_carry","DB Farmer's Carry","Grip · Core","3","40s","Walk",60,"40 seconds this phase (+10 s). Max load maintaining upright posture."]]},{"phase":3,"exercises":[["pendlay_row","DB Pendlay-Style Row","Lats · Power","4","6–8","1-0-X-1",150,"Reset DBs to floor between every rep. Explosive pull from dead stop. 12 kg+. Rate of force."],["chest_supported_row","Chest-Supported Row (heavy)","Mid-back — Strength","4","6–8","2-2-1-0",120,"Max load with strict form. 2-second pause at top. No lower back fatigue to limit you."],["rear_delt_fly","Rear Delt Fly + Band Pull-Apart","Rear Delt — Superset","3","10+15","Controlled",75,"10 prone flies then 15 band pull-aparts (or 20 flies if no band). Shoulder armour."],["incline_curl","DB Incline Curl (lengthened)","Biceps — Long head","3","8–10","3-0-2-1",90,"Sit back on incline, let arms hang behind torso. Maximum stretch. 8–10 kg. Very humbling."],["farmers_carry","DB Farmer's Carry (max)","Grip · Total body","3","50s","Walk",60,"Max load. Grip is the limiting factor now. Carryover to all pulling movements."]]}]},{"id":"C","name":"Legs","muscles":"Quads · Hamstrings · Glutes · Core","phases":[{"phase":1,"exercises":[["goblet_squat","DB Goblet Squat","Quads · Glutes · Core","3","12–15","4-1-2-0",90,"Hold DB at chest. 4-second descent. Sit deep, knees track toes. Feel quad burn. 12 kg."],["rdl","DB Romanian Deadlift","Hamstrings · Glutes","3","12","3-1-2-0",90,"Hip hinge with both DBs. Push hips back. Feel hamstring stretch. Slight knee bend throughout."],["reverse_lunge","DB Reverse Lunge","Quads · Glutes — Unilateral","3","10/leg","3-0-2-0",60,"Step back, control descent. Lower knee toward floor. Front shin stays vertical. One DB each hand."],["calf_raise","DB Calf Raise (standing)","Gastrocnemius · Soleus","3","20","2-1-2-2",45,"Full range. 2-second pause at bottom for soleus stretch. Use a step for extra ROM if available."],["pallof_press","Pallof Press (DB variation)","Anti-rotation core","3","10/side","Controlled",45,"Hold DB at chest, extend arms straight forward, resist rotation. Obliques working hard."]]},{"phase":2,"exercises":[["bulgarian_split","DB Bulgarian Split Squat","Quads · Glutes — Primary","4","8–10/leg","4-1-2-0",120,"Rear foot elevated. Front leg does all work. 4-second descent. 12 kg will be very hard here."],["single_leg_rdl","DB Single-Leg RDL","Hamstrings · Glutes — Unilateral","3","10/leg","3-1-2-0",90,"Hinge on one leg, rear leg extends for counterbalance. Hold opposite DB to working leg."],["goblet_squat_pause","DB Goblet Squat (pause)","Quads — Lengthened emphasis","3","10","3-3-2-0",90,"3-second pause at the bottom. Removes stretch reflex. More muscular demand. Brutal with 12 kg."],["calf_raise_single","DB Calf Raise (single-leg)","Gastrocnemius — Unilateral","3","15/leg","2-1-2-2",45,"Single leg doubles the load. Hold one DB. Free hand on wall for balance only."],["suitcase_carry","DB Suitcase Carry + Lunge","Lateral core · Glutes","3","8/side","Controlled",60,"DB one side only. Resist lateral lean. Step-lunge forward. Oblique and QL anti-lateral."]]},{"phase":3,"exercises":[["bulgarian_split","DB Bulgarian Split Squat (heavy)","Quad · Glute — Strength","4","6–8/leg","3-2-1-0",150,"Max load. Beat Phase 2. 2-second pause at bottom every rep. Primary leg strength indicator."],["sumo_deadlift","DB Sumo Deadlift","Glutes · Adductors · Hamstrings","4","6–8","3-1-2-0",120,"Wide stance, toes out. Single heavy DB held vertically between legs. Max load hip hinge."],["step_up","DB Step-Up (explosive)","Quads · Glutes — Power","3","8/leg","X-0-3-0",90,"Drive up explosively through front foot. Control the lowering. Knee-height step. New stimulus."],["calf_raise_single","DB Calf Raise (single-leg, loaded)","Calves — Strength endurance","3","12/leg","2-2-2-2",60,"Max load. 2-second pause top and bottom. No bouncing. Full range every single rep."],["turkish_getup","DB Turkish Get-Up","Total integration · Core","3","3/side","Slow",90,"Floor to standing with DB overhead throughout. Start 6–8 kg. Slow and deliberate every time."]]}]}]};
+
+// ── SVG MAP (inline) ──────────────────────────────────────────────────────────
+</script>
+<script id="svg-data-script">
+// SVG_MAP inserted by Python below
+</script>
+<script>
+const SVG_MAP = {
+  "floor_press": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="5" y="52" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><line x1="12" y1="50" x2="75" y2="50" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="44" r="6" fill="#1a1a1a"/><line x1="65" y1="50" x2="72" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="72" y1="60" x2="68" y2="68" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="50" x2="58" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="60" x2="54" y2="68" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="50" x2="20" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="20" y1="40" x2="25" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="50" x2="50" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="40" x2="45" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="11.0" y1="27.0" x2="39.0" y2="27.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="11.0" y1="23.0" x2="11.0" y2="31.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="39.0" y1="23.0" x2="39.0" y2="31.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="31.0" y1="27.0" x2="59.0" y2="27.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="31.0" y1="23.0" x2="31.0" y2="31.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="59.0" y1="23.0" x2="59.0" y2="31.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/></svg>`,
+  "seated_shoulder_press": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="25" y="55" width="40" height="5" rx="2" fill="#2c3e50" opacity="0.3"/><circle cx="45" cy="10" r="6" fill="#1a1a1a"/><line x1="45" y1="16" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="55" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="55" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="55" x2="33" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="55" x2="57" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="30" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="18" x2="28" y2="8" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="60" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="18" x2="62" y2="8" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="14.0" y1="6.0" x2="42.0" y2="6.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="14.0" y1="2.0" x2="14.0" y2="10.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="42.0" y1="2.0" x2="42.0" y2="10.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="48.0" y1="6.0" x2="76.0" y2="6.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="48.0" y1="2.0" x2="48.0" y2="10.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="76.0" y1="2.0" x2="76.0" y2="10.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="45" y1="45" x2="45" y2="35" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="48.0" y1="41.0" x2="45" y2="35" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="42.0" y1="41.0" x2="45" y2="35" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "lateral_raise": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="10" r="6" fill="#1a1a1a"/><line x1="45" y1="16" x2="45" y2="42" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="42" x2="38" y2="55" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="42" x2="52" y2="55" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="55" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="55" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="22" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="30" x2="12" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="68" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="68" y1="30" x2="78" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="10.0" y1="14.0" x2="10.0" y2="42.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="14.0" y1="14.0" x2="6.0" y2="14.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="14.0" y1="42.0" x2="6.0" y2="42.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="78.0" y1="14.0" x2="78.0" y2="42.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="82.0" y1="14.0" x2="74.0" y2="14.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="82.0" y1="42.0" x2="74.0" y2="42.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="18" y1="30" x2="10" y2="25" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="16.7" y1="25.6" x2="10" y2="25" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="13.5" y1="30.7" x2="10" y2="25" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="72" y1="30" x2="80" y2="25" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="76.5" y1="30.7" x2="80" y2="25" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="73.3" y1="25.6" x2="80" y2="25" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "overhead_tricep_ext": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="20" x2="42" y2="10" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="10" x2="48" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="20" x2="48" y2="10" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="10" x2="42" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="31.0" y1="8.0" x2="59.0" y2="8.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="31.0" y1="4.0" x2="31.0" y2="12.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="59.0" y1="4.0" x2="59.0" y2="12.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="45" y1="20" x2="45" y2="10" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="48.0" y1="16.0" x2="45" y2="10" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="42.0" y1="16.0" x2="45" y2="10" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "dead_bug": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="5" y="54" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><circle cx="22" cy="46" r="6" fill="#1a1a1a"/><line x1="28" y1="46" x2="68" y2="46" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="35" y1="46" x2="28" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="30" x2="24" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="46" x2="62" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="30" x2="66" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="65" y1="46" x2="72" y2="36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="72" y1="36" x2="78" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="46" x2="58" y2="56" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="56" x2="70" y2="56" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">opposite arm-leg extend</text></svg>`,
+  "incline_press": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><line x1="15" y1="60" x2="70" y2="45" stroke="#2c3e50" stroke-width="4" stroke-linecap="round" opacity="0.4"/><line x1="15" y1="60" x2="15" y2="68" stroke="#2c3e50" stroke-width="3" opacity="0.4"/><line x1="55" y1="52" x2="55" y2="62" stroke="#2c3e50" stroke-width="3" opacity="0.4"/><circle cx="22" cy="50" r="6" fill="#1a1a1a"/><line x1="28" y1="52" x2="65" y2="42" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="38" y1="48" x2="28" y2="36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="36" x2="25" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="44" x2="60" y2="34" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="34" x2="63" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="10.2" y1="21.6" x2="37.8" y2="26.4" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="10.9" y1="17.6" x2="9.5" y2="25.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="38.5" y1="22.5" x2="37.1" y2="30.4" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="49.2" y1="19.6" x2="76.8" y2="24.4" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="49.9" y1="15.6" x2="48.5" y2="23.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="77.5" y1="20.5" x2="76.1" y2="28.4" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/></svg>`,
+  "tricep_kickback": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="20" cy="22" r="6" fill="#1a1a1a"/><line x1="26" y1="24" x2="60" y2="35" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="60" y1="35" x2="65" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="35" x2="52" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="65" y1="48" x2="63" y2="58" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="48" x2="50" y2="58" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="30" x2="52" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="30" x2="62" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="64.0" y1="8.0" x2="64.0" y2="36.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="68.0" y1="8.0" x2="60.0" y2="8.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="68.0" y1="36.0" x2="60.0" y2="36.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="30" y1="28" x2="22" y2="38" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><line x1="55" y1="30" x2="65" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="61.4" y1="29.7" x2="65" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="58.3" y1="24.5" x2="65" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "plank_shoulder_tap": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="5" y="52" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><circle cx="14" cy="40" r="6" fill="#1a1a1a"/><line x1="20" y1="42" x2="74" y2="42" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="28" y1="42" x2="24" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="52" x2="20" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="42" x2="64" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="64" y1="52" x2="68" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="68" y1="42" x2="72" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="72" y1="52" x2="75" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="74" y1="42" x2="78" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="44" y1="42" x2="36" y2="38" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><circle cx="36" cy="36" r="4" fill="none" stroke="#c0392b" stroke-width="1.5"/><line x1="36" y1="38" x2="40" y2="42" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="33.6" y1="39.9" x2="40" y2="42" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="37.9" y1="35.6" x2="40" y2="42" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "push_press": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="20" x2="28" y2="16" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="16" x2="26" y2="6" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="20" x2="62" y2="16" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="16" x2="64" y2="6" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="12.0" y1="5.0" x2="40.0" y2="5.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="12.0" y1="1.0" x2="12.0" y2="9.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="40.0" y1="1.0" x2="40.0" y2="9.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="50.0" y1="5.0" x2="78.0" y2="5.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="50.0" y1="1.0" x2="50.0" y2="9.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="78.0" y1="1.0" x2="78.0" y2="9.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="45" y1="50" x2="45" y2="40" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="48.0" y1="46.0" x2="45" y2="40" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="42.0" y1="46.0" x2="45" y2="40" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "hollow_body": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="5" y="54" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><path d="M 15,50 Q 45,35 75,50" fill="none" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><circle cx="12" cy="46" r="6" fill="#1a1a1a"/><line x1="15" y1="50" x2="8" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="8" y1="42" x2="5" y2="35" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="70" y1="50" x2="78" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="78" y1="44" x2="84" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">back flat, legs raised</text></svg>`,
+  "close_grip_floor_press": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="5" y="52" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><line x1="12" y1="50" x2="75" y2="50" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><circle cx="10" cy="44" r="6" fill="#1a1a1a"/><line x1="65" y1="50" x2="72" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="72" y1="60" x2="68" y2="68" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="50" x2="58" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="60" x2="54" y2="68" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="50" x2="28" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="40" x2="33" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="50" x2="44" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="44" y1="40" x2="39" y2="30" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="22.0" y1="28.0" x2="50.0" y2="28.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="22.0" y1="24.0" x2="22.0" y2="32.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="50.0" y1="24.0" x2="50.0" y2="32.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">elbows in, DBs close</text></svg>`,
+  "bent_over_row": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="22" cy="20" r="6" fill="#1a1a1a"/><line x1="28" y1="22" x2="60" y2="36" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="55" y1="36" x2="50" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="36" x2="62" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="52" x2="48" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="50" x2="64" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="35" y1="26" x2="28" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="22" x2="22" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="32" x2="55" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="28" x2="62" y2="34" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="17.6" y1="16.2" x2="22.4" y2="43.8" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="21.5" y1="15.5" x2="13.6" y2="16.9" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="26.4" y1="43.1" x2="18.5" y2="44.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="61.6" y1="22.2" x2="66.4" y2="49.8" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="65.5" y1="21.5" x2="57.6" y2="22.9" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="70.4" y1="49.1" x2="62.5" y2="50.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="24" y1="30" x2="26" y2="22" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="27.5" y1="28.5" x2="26" y2="22" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="21.6" y1="27.1" x2="26" y2="22" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="60" y1="36" x2="58" y2="28" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="62.4" y1="33.1" x2="58" y2="28" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="56.5" y1="34.5" x2="58" y2="28" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "single_arm_row": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="14" y="38" width="28" height="8" rx="2" fill="#2c3e50" opacity="0.3"/><circle cx="20" cy="22" r="6" fill="#1a1a1a"/><line x1="26" y1="24" x2="56" y2="30" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="50" y1="30" x2="46" y2="46" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="30" x2="64" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="64" y1="44" x2="66" y2="56" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="26" x2="22" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="28" x2="58" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="22" x2="64" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="63.6" y1="16.2" x2="68.4" y2="43.8" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="67.5" y1="15.5" x2="59.6" y2="16.9" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="72.4" y1="43.1" x2="64.5" y2="44.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="60" y1="26" x2="58" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="62.7" y1="24.7" x2="58" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="57.1" y1="26.6" x2="58" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "rear_delt_fly": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="20" y="34" width="50" height="8" rx="2" fill="#2c3e50" opacity="0.3"/><circle cx="24" cy="28" r="6" fill="#1a1a1a"/><line x1="30" y1="30" x2="72" y2="30" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="65" y1="30" x2="70" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="72" y1="30" x2="76" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="30" x2="30" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="22" x2="22" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="30" x2="65" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="65" y1="22" x2="73" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="13.0" y1="4.9" x2="27.0" y2="29.1" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="16.5" y1="2.9" x2="9.5" y2="6.9" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="30.5" y1="27.1" x2="23.5" y2="31.1" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="68.0" y1="29.1" x2="82.0" y2="4.9" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="64.5" y1="27.1" x2="71.5" y2="31.1" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="78.5" y1="2.9" x2="85.5" y2="6.9" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="26" y1="22" x2="20" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="26.7" y1="18.8" x2="20" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="23.3" y1="23.8" x2="20" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="67" y1="22" x2="74" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="70.3" y1="23.6" x2="74" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="67.3" y1="18.4" x2="74" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "hammer_curl": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="30" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="26" x2="28" y2="38" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="60" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="26" x2="62" y2="16" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62.0" y1="-1.0" x2="62.0" y2="27.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="66.0" y1="-1.0" x2="58.0" y2="-1.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="66.0" y1="27.0" x2="58.0" y2="27.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="27.0" y1="26.0" x2="27.0" y2="54.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="31.0" y1="26.0" x2="23.0" y2="26.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="31.0" y1="54.0" x2="23.0" y2="54.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="60" y1="28" x2="62" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="63.8" y1="24.5" x2="62" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="57.9" y1="23.3" x2="62" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "farmers_carry": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="40" cy="9" r="6" fill="#1a1a1a"/><line x1="40" y1="15" x2="40" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="40" y1="40" x2="34" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="40" x2="46" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="34" y1="54" x2="32" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="54" x2="52" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="22" x2="22" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="28" x2="20" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="40" y1="22" x2="58" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="28" x2="60" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="20.0" y1="34.0" x2="20.0" y2="62.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="24.0" y1="34.0" x2="16.0" y2="34.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="24.0" y1="62.0" x2="16.0" y2="62.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="60.0" y1="34.0" x2="60.0" y2="62.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="64.0" y1="34.0" x2="56.0" y2="34.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="64.0" y1="62.0" x2="56.0" y2="62.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="42" y1="50" x2="52" y2="50" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="46.0" y1="53.0" x2="52" y2="50" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="46.0" y1="47.0" x2="52" y2="50" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "chest_supported_row": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><line x1="12" y1="58" x2="72" y2="34" stroke="#2c3e50" stroke-width="4" opacity="0.4" stroke-linecap="round"/><line x1="12" y1="58" x2="12" y2="66" stroke="#2c3e50" stroke-width="3" opacity="0.4"/><line x1="60" y1="40" x2="60" y2="52" stroke="#2c3e50" stroke-width="3" opacity="0.4"/><circle cx="18" cy="48" r="6" fill="#1a1a1a"/><line x1="24" y1="50" x2="68" y2="30" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="65" y1="32" x2="70" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="70" y1="42" x2="72" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="35" y1="44" x2="28" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="54" x2="26" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="36" x2="56" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="26" x2="60" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="12.2" y1="61.6" x2="39.8" y2="66.4" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="12.9" y1="57.6" x2="11.5" y2="65.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="40.5" y1="62.5" x2="39.1" y2="70.4" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="48.2" y1="17.6" x2="75.8" y2="22.4" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="48.9" y1="13.6" x2="47.5" y2="21.5" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="76.5" y1="18.5" x2="75.1" y2="26.4" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="30" y1="52" x2="32" y2="44" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="33.5" y1="50.5" x2="32" y2="44" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="27.6" y1="49.1" x2="32" y2="44" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "supinated_curl": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="28" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="28" x2="24" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="62" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="28" x2="66" y2="18" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="9.0" y1="15.0" x2="37.0" y2="15.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="9.0" y1="11.0" x2="9.0" y2="19.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="37.0" y1="11.0" x2="37.0" y2="19.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="53.0" y1="15.0" x2="81.0" y2="15.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="53.0" y1="11.0" x2="53.0" y2="19.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="81.0" y1="11.0" x2="81.0" y2="19.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="26" y1="26" x2="24" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="28.4" y1="23.1" x2="24" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="22.5" y1="24.5" x2="24" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="64" y1="26" x2="66" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="67.5" y1="24.5" x2="66" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="61.6" y1="23.1" x2="66" y2="18" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "incline_curl": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><line x1="15" y1="62" x2="68" y2="40" stroke="#2c3e50" stroke-width="4" opacity="0.4" stroke-linecap="round"/><line x1="15" y1="62" x2="15" y2="68" stroke="#2c3e50" stroke-width="3" opacity="0.4"/><line x1="55" y1="48" x2="55" y2="58" stroke="#2c3e50" stroke-width="3" opacity="0.4"/><circle cx="26" cy="42" r="6" fill="#1a1a1a"/><line x1="32" y1="44" x2="62" y2="34" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="58" y1="34" x2="65" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="65" y1="44" x2="68" y2="55" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="42" x2="30" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="54" x2="28" y2="64" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="38" x2="52" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="50" x2="50" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="13.0" y1="66.0" x2="41.0" y2="66.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="13.0" y1="62.0" x2="13.0" y2="70.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="41.0" y1="62.0" x2="41.0" y2="70.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="36.0" y1="64.0" x2="64.0" y2="64.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="36.0" y1="60.0" x2="36.0" y2="68.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="64.0" y1="60.0" x2="64.0" y2="68.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><text x="45" y="10" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">arms hang behind torso</text></svg>`,
+  "pendlay_row": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="22" cy="18" r="6" fill="#1a1a1a"/><line x1="28" y1="20" x2="62" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="55" y1="32" x2="50" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="55" y1="32" x2="62" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="50" x2="48" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="48" x2="64" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="24" x2="32" y2="36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="36" x2="28" y2="46" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="28" x2="56" y2="36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="36" x2="58" y2="46" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="14.0" y1="50.0" x2="42.0" y2="50.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="14.0" y1="46.0" x2="14.0" y2="54.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="42.0" y1="46.0" x2="42.0" y2="54.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="44.0" y1="50.0" x2="72.0" y2="50.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="44.0" y1="46.0" x2="44.0" y2="54.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="72.0" y1="46.0" x2="72.0" y2="54.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="22" y="50" width="44" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">reset to floor each rep</text></svg>`,
+  "band_pull_apart": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="24" x2="22" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="24" x2="68" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><path d="M 22,24 Q 45,20 68,24" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="3,2"/><circle cx="22" cy="24" r="3" fill="#c0392b"/><circle cx="68" cy="24" r="3" fill="#c0392b"/><line x1="42" y1="24" x2="22" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="28.0" y1="21.0" x2="22" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="28.0" y1="27.0" x2="22" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="48" y1="24" x2="68" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="62.0" y1="27.0" x2="68" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="62.0" y1="21.0" x2="68" y2="24" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">pull band to chest width</text></svg>`,
+  "goblet_squat": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="35" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="35" x2="38" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="35" x2="52" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="50" x2="36" y2="64" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="50" x2="54" y2="64" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="34" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="34" y1="26" x2="32" y2="32" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="56" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="26" x2="58" y2="32" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45.0" y1="20.0" x2="45.0" y2="48.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="49.0" y1="20.0" x2="41.0" y2="20.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="49.0" y1="48.0" x2="41.0" y2="48.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="72" y1="25" x2="72" y2="45" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="69.0" y1="39.0" x2="72" y2="45" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="75.0" y1="39.0" x2="72" y2="45" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><text x="72" y="18" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">deep</text></svg>`,
+  "goblet_squat_pause": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="14" r="6" fill="#1a1a1a"/><line x1="45" y1="20" x2="45" y2="36" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="36" x2="30" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="36" x2="60" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="48" x2="28" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60" y1="48" x2="62" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="24" x2="32" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="28" x2="28" y2="35" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="24" x2="58" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="28" x2="62" y2="35" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45.0" y1="23.0" x2="45.0" y2="51.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="49.0" y1="23.0" x2="41.0" y2="23.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="49.0" y1="51.0" x2="41.0" y2="51.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="68" y="28" width="4" height="12" rx="1" fill="#c0392b"/><rect x="75" y="28" width="4" height="12" rx="1" fill="#c0392b"/><text x="73" y="20" fill="#c0392b" font-size="8" text-anchor="middle" font-family="sans-serif">3s</text></svg>`,
+  "rdl": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="22" cy="16" r="6" fill="#1a1a1a"/><line x1="28" y1="18" x2="58" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="52" y1="32" x2="48" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="32" x2="58" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="50" x2="46" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="58" y1="48" x2="60" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="35" y1="24" x2="30" y2="36" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="36" x2="28" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="30" x2="52" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="40" x2="52" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="13.0" y1="54.0" x2="41.0" y2="54.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="13.0" y1="50.0" x2="13.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="41.0" y1="50.0" x2="41.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="38.0" y1="56.0" x2="66.0" y2="56.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="38.0" y1="52.0" x2="38.0" y2="60.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="66.0" y1="52.0" x2="66.0" y2="60.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="5" y="60" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><line x1="40" y1="20" x2="42" y2="12" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="43.5" y1="18.5" x2="42" y2="12" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="37.6" y1="17.1" x2="42" y2="12" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "reverse_lunge": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="38" cy="9" r="6" fill="#1a1a1a"/><line x1="38" y1="15" x2="38" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="38" y1="32" x2="34" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="34" y1="48" x2="32" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="32" x2="50" y2="46" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="46" x2="54" y2="58" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="58" x2="60" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="20" x2="22" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="22" y1="26" x2="18" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="20" x2="54" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="24" x2="58" y2="38" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="17.0" y1="30.0" x2="17.0" y2="58.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="21.0" y1="30.0" x2="13.0" y2="30.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="21.0" y1="58.0" x2="13.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="58.0" y1="28.0" x2="58.0" y2="56.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="62.0" y1="28.0" x2="54.0" y2="28.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="62.0" y1="56.0" x2="54.0" y2="56.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="5" y="62" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/></svg>`,
+  "calf_raise": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="34" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="34" y1="62" x2="36" y2="66" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="56" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="62" x2="54" y2="66" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="28" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="28" x2="24" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="62" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="28" x2="66" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="23.0" y1="34.0" x2="23.0" y2="62.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="27.0" y1="34.0" x2="19.0" y2="34.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="27.0" y1="62.0" x2="19.0" y2="62.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="66.0" y1="34.0" x2="66.0" y2="62.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="70.0" y1="34.0" x2="62.0" y2="34.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="70.0" y1="62.0" x2="62.0" y2="62.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="45" y1="58" x2="45" y2="48" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="48.0" y1="54.0" x2="45" y2="48" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="42.0" y1="54.0" x2="45" y2="48" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><rect x="5" y="66" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/></svg>`,
+  "pallof_press": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="40" x2="38" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="40" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="54" x2="36" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="54" y2="65" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="24" x2="22" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="24" x2="68" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="31.0" y1="24.0" x2="59.0" y2="24.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="31.0" y1="20.0" x2="31.0" y2="28.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="59.0" y1="20.0" x2="59.0" y2="28.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><path d="M 68,18 A 10,10 0 0,1 68,30" fill="none" stroke="#c0392b" stroke-width="1.5"/><line x1="68" y1="30" x2="64" y2="32" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="68.0" y1="26.6" x2="64" y2="32" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="70.7" y1="32.0" x2="64" y2="32" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">resist rotation</text></svg>`,
+  "bulgarian_split": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="52" y="42" width="30" height="8" rx="2" fill="#2c3e50" opacity="0.3"/><circle cx="30" cy="9" r="6" fill="#1a1a1a"/><line x1="30" y1="15" x2="30" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="30" y1="32" x2="24" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="48" x2="20" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="32" x2="46" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="44" x2="54" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="20" x2="14" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="14" y1="26" x2="10" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="20" x2="46" y2="24" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="24" x2="50" y2="38" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="9.0" y1="30.0" x2="9.0" y2="58.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="13.0" y1="30.0" x2="5.0" y2="30.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="13.0" y1="58.0" x2="5.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="50.0" y1="28.0" x2="50.0" y2="56.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="54.0" y1="28.0" x2="46.0" y2="28.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="54.0" y1="56.0" x2="46.0" y2="56.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="5" y="62" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><line x1="24" y1="44" x2="24" y2="52" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="21.0" y1="46.0" x2="24" y2="52" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="27.0" y1="46.0" x2="24" y2="52" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "single_leg_rdl": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="22" cy="18" r="6" fill="#1a1a1a"/><line x1="28" y1="20" x2="60" y2="38" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="54" y1="36" x2="52" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="54" x2="50" y2="64" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="36" x2="68" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="68" y1="28" x2="78" y2="22" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="26" x2="34" y2="38" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="34" y1="38" x2="30" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="14.0" y1="54.0" x2="42.0" y2="54.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="14.0" y1="50.0" x2="14.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="42.0" y1="50.0" x2="42.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="5" y="64" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">rear leg counterbalance</text></svg>`,
+  "calf_raise_single": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="42" cy="9" r="6" fill="#1a1a1a"/><line x1="42" y1="15" x2="42" y2="40" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="42" y1="40" x2="36" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="54" x2="32" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="62" x2="34" y2="66" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="40" x2="50" y2="50" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="50" x2="52" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="42" y1="22" x2="24" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="28" x2="20" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="19.0" y1="34.0" x2="19.0" y2="62.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="23.0" y1="34.0" x2="15.0" y2="34.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="23.0" y1="62.0" x2="15.0" y2="62.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="42" y1="22" x2="60" y2="26" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><rect x="66" y="22" width="4" height="44" rx="1" fill="#2c3e50" opacity="0.3"/><line x1="60" y1="26" x2="66" y2="26" stroke="#1a1a1a" stroke-width="1.5" stroke-linecap="round"/><rect x="5" y="66" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/></svg>`,
+  "suitcase_carry": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="38" cy="9" r="6" fill="#1a1a1a"/><line x1="38" y1="15" x2="38" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="38" y1="32" x2="32" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="32" y1="48" x2="30" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="32" x2="50" y2="46" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="46" x2="54" y2="58" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="58" x2="60" y2="60" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="20" x2="56" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="26" x2="60" y2="40" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="60.0" y1="30.0" x2="60.0" y2="58.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="64.0" y1="30.0" x2="56.0" y2="30.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="64.0" y1="58.0" x2="56.0" y2="58.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="38" y1="20" x2="22" y2="26" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><line x1="22" y1="26" x2="20" y2="40" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round"/><path d="M 44,15 Q 50,22 46,30" fill="none" stroke="#c0392b" stroke-width="1.5" stroke-dasharray="2,2"/><text x="45" y="68" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">resist lateral lean</text><rect x="5" y="62" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/></svg>`,
+  "sumo_deadlift": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="45" cy="9" r="6" fill="#1a1a1a"/><line x1="45" y1="15" x2="45" y2="36" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="36" x2="28" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="36" x2="62" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="28" y1="52" x2="22" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="62" y1="52" x2="68" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="36" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="36" y1="28" x2="36" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="54" y2="28" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="54" y1="28" x2="54" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="45.0" y1="32.0" x2="45.0" y2="60.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="49.0" y1="32.0" x2="41.0" y2="32.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="49.0" y1="60.0" x2="41.0" y2="60.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><rect x="5" y="62" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><line x1="45" y1="44" x2="45" y2="34" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="48.0" y1="40.0" x2="45" y2="34" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="42.0" y1="40.0" x2="45" y2="34" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "step_up": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><rect x="36" y="46" width="42" height="8" rx="2" fill="#2c3e50" opacity="0.4"/><rect x="36" y="54" width="42" height="6" rx="1" fill="#2c3e50" opacity="0.25"/><circle cx="48" cy="9" r="6" fill="#1a1a1a"/><line x1="48" y1="15" x2="48" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="48" y1="32" x2="46" y2="46" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="46" x2="46" y2="54" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="32" x2="52" y2="48" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="52" y1="48" x2="56" y2="58" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="56" y1="58" x2="58" y2="62" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="20" x2="30" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="30" y1="26" x2="26" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="48" y1="20" x2="66" y2="26" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="66" y1="26" x2="70" y2="42" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="25.0" y1="32.0" x2="25.0" y2="60.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="29.0" y1="32.0" x2="21.0" y2="32.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="29.0" y1="60.0" x2="21.0" y2="60.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="70.0" y1="32.0" x2="70.0" y2="60.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="74.0" y1="32.0" x2="66.0" y2="32.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="74.0" y1="60.0" x2="66.0" y2="60.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="48" y1="36" x2="48" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="51.0" y1="26.0" x2="48" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/><line x1="45.0" y1="26.0" x2="48" y2="20" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+  "turkish_getup": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 72" width="90" height="72" style="background:#f5f0e8;border-radius:4px;"><circle cx="26" cy="14" r="6" fill="#1a1a1a"/><line x1="26" y1="20" x2="38" y2="32" stroke="#1a1a1a" stroke-width="3" stroke-linecap="round"/><line x1="38" y1="32" x2="46" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="46" y1="44" x2="50" y2="56" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="38" y1="32" x2="26" y2="44" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="26" y1="44" x2="20" y2="52" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="26" y1="20" x2="20" y2="12" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="20" y1="12" x2="18" y2="5" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><line x1="18.0" y1="-10.0" x2="18.0" y2="18.0" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/><line x1="22.0" y1="-10.0" x2="14.0" y2="-10.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="22.0" y1="18.0" x2="14.0" y2="18.0" stroke="#c0392b" stroke-width="5" stroke-linecap="round"/><line x1="38" y1="30" x2="50" y2="38" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round"/><rect x="5" y="56" width="80" height="3" rx="1" fill="#2c3e50" opacity="0.3"/><text x="55" y="14" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">DB overhead</text><text x="55" y="22" fill="#888" font-size="7" text-anchor="middle" font-family="sans-serif">throughout</text></svg>`
+};
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════════════════════════
+const DELOAD_WEEKS = [4, 8];
+const TOTAL_SESSIONS = 36; // 12 weeks × 3 sessions
+
+let state = loadState();
+
+function defaultState() {
+  return {
+    currentWeek: 1,
+    weekSessionsDone: { A: false, B: false, C: false },
+    log: {}, // key: "W{n}_{sessionId}" → { date, sets: [{weight,reps},...], notes }
+    prs: {}, // key: exercise name → max weight
+    allWeeksProgress: {}, // key: week → { A, B, C }
+  };
+}
+
+function loadState() {
+  try {
+    const s = localStorage.getItem('gym_app_state');
+    if (s) return { ...defaultState(), ...JSON.parse(s) };
+  } catch(e) {}
+  return defaultState();
+}
+
+function saveState() {
+  try { localStorage.setItem('gym_app_state', JSON.stringify(state)); } catch(e) {}
+}
+
+// Current session context
+let currentSession = null; // { sessionId, phaseId, exercises, setData }
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PHASE LOGIC
+// ══════════════════════════════════════════════════════════════════════════════
+function getPhaseForWeek(week) {
+  if (week <= 4) return PROGRAMME.phases[0];
+  if (week <= 8) return PROGRAMME.phases[1];
+  return PROGRAMME.phases[2];
+}
+
+function getSessionPhaseData(sessionId, phaseId) {
+  const sess = PROGRAMME.sessions.find(s => s.id === sessionId);
+  return sess.phases.find(p => p.phase === phaseId);
+}
+
+function getNextSessionId() {
+  const order = ['A','B','C'];
+  for (const id of order) {
+    if (!state.weekSessionsDone[id]) return id;
+  }
+  return 'A'; // all done, wrap
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// HOME SCREEN
+// ══════════════════════════════════════════════════════════════════════════════
+function renderHome() {
+  const week = state.currentWeek;
+  const phase = getPhaseForWeek(week);
+  const isDeload = DELOAD_WEEKS.includes(week);
+  const done = state.weekSessionsDone;
+  const doneCount = [done.A, done.B, done.C].filter(Boolean).length;
+
+  document.getElementById('home-week-num').textContent = week;
+  document.getElementById('home-phase-title').textContent = isDeload ? 'Deload Week' : phase.name;
+  document.getElementById('home-phase-badge').textContent = isDeload ? 'Deload · RPE 5' : `Phase ${phase.id} · RPE ${phase.rpe}`;
+
+  const pct = Math.round((doneCount / 3) * 100);
+  document.getElementById('week-progress-fill').style.width = pct + '%';
+  document.getElementById('wk-progress-sessions').textContent = `${doneCount}/3 sessions`;
+  document.getElementById('wk-progress-pct').textContent = pct + '%';
+
+  // Stats
+  const totalDone = Object.values(state.allWeeksProgress || {}).reduce((a, wk) => {
+    return a + [wk.A, wk.B, wk.C].filter(Boolean).length;
+  }, 0);
+  document.getElementById('stat-total-sessions').textContent = totalDone;
+  document.getElementById('stat-streak').textContent = calcStreak();
+  const weeksDone = Object.keys(state.allWeeksProgress || {}).filter(w => {
+    const wk = state.allWeeksProgress[w];
+    return wk && wk.A && wk.B && wk.C;
+  }).length;
+  document.getElementById('stat-weeks-done').textContent = weeksDone;
+
+  // Session cards
+  const grid = document.getElementById('home-session-grid');
+  const sessions = PROGRAMME.sessions;
+  grid.innerHTML = sessions.map(s => {
+    const isDone = done[s.id];
+    const isNext = !isDone && getNextSessionId() === s.id;
+    let cls = 'session-card';
+    if (isDone) cls += ' done';
+    else if (isNext) cls += ' active-session';
+    return `<div class="${cls}" onclick="startSession('${s.id}')">
+      <div class="session-letter">${s.id}</div>
+      <div class="session-label">${s.name}</div>
+      <div class="session-check">${isDone ? '✅' : isNext ? '▶' : '⬜'}</div>
+    </div>`;
+  }).join('');
+
+  // Start button
+  const next = getNextSessionId();
+  const allDone = done.A && done.B && done.C;
+  const btn = document.getElementById('home-start-btn');
+  const lbl = document.getElementById('start-btn-label');
+  if (allDone) {
+    lbl.textContent = `Week ${week} Complete! → Week ${Math.min(week+1,12)}`;
+    btn.onclick = () => advanceWeek();
+  } else {
+    lbl.textContent = `Start Session ${next}`;
+    btn.onclick = () => startNextSession();
+  }
+
+  // Deload banner
+  document.getElementById('deload-banner').classList.toggle('hidden', !isDeload);
+}
+
+function calcStreak() {
+  let streak = 0;
+  const prog = state.allWeeksProgress || {};
+  // count consecutive sessions done backwards
+  for (let w = state.currentWeek; w >= 1; w--) {
+    const wk = prog[w];
+    if (!wk) break;
+    if (wk.A) streak++;
+    if (wk.B) streak++;
+    if (wk.C) streak++;
+    if (!wk.A && !wk.B && !wk.C) break;
+  }
+  return streak;
+}
+
+function advanceWeek() {
+  if (state.currentWeek < 12) {
+    state.currentWeek++;
+    state.weekSessionsDone = { A: false, B: false, C: false };
+    saveState();
+    renderHome();
+  }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SESSION SCREEN
+// ══════════════════════════════════════════════════════════════════════════════
+function startNextSession() {
+  startSession(getNextSessionId());
+}
+
+function startSession(sessionId) {
+  const week = state.currentWeek;
+  const phase = getPhaseForWeek(week);
+  const sessData = PROGRAMME.sessions.find(s => s.id === sessionId);
+  const phaseData = getSessionPhaseData(sessionId, phase.id);
+  const isDeload = DELOAD_WEEKS.includes(week);
+
+  // Build set data structure
+  const setData = phaseData.exercises.map(ex => {
+    const numSets = isDeload ? 2 : parseInt(ex[3]);
+    return {
+      key: ex[0], name: ex[1], done: false,
+      sets: Array.from({length: numSets}, (_, i) => ({ weight: '', reps: '', done: false }))
+    };
+  });
+
+  currentSession = { sessionId, phaseId: phase.id, sessData, phaseData, setData, isDeload };
+
+  // Update UI
+  document.getElementById('session-topnav-title').textContent = `Session ${sessionId} — ${sessData.name}`;
+  document.getElementById('session-phase-badge').textContent = `Ph.${phase.id}`;
+  document.getElementById('session-muscles-label').textContent = sessData.muscles;
+  const spec = isDeload
+    ? '2 sets (deload) · Same reps · RPE 5'
+    : `${phase.sets} sets · ${phase.repRange} reps · RPE ${phase.rpe}`;
+  document.getElementById('session-spec-label').textContent = spec;
+  document.getElementById('session-ex-count').textContent = phaseData.exercises.length;
+
+  renderExerciseList();
+  document.getElementById('finish-session-btn').classList.add('hidden');
+
+  switchTab('session');
+  document.getElementById('tab-session').style.display = 'flex';
+}
+
+function renderExerciseList() {
+  const list = document.getElementById('ex-list');
+  const { phaseData, setData, isDeload } = currentSession;
+
+  list.innerHTML = setData.map((exState, idx) => {
+    const ex = phaseData.exercises[idx];
+    const [key, name, muscle, sets, reps, tempo, restSecs, coach] = ex;
+    const numSets = isDeload ? 2 : parseInt(sets);
+    const svgStr = SVG_MAP[key] || '';
+    const isDone = exState.sets.every(s => s.done);
+
+    const setRows = exState.sets.map((setS, si) => `
+      <div class="set-row ${setS.done ? 'set-done' : ''}" id="setrow-${idx}-${si}">
+        <div class="set-num-badge">${si+1}</div>
+        <input class="set-input" type="number" inputmode="decimal" placeholder="kg"
+          value="${setS.weight}" min="0" step="0.5"
+          onchange="updateSetWeight(${idx},${si},this.value)"
+          onfocus="this.select()"/>
+        <input class="set-input" type="text" inputmode="text" placeholder="reps"
+          value="${setS.reps}"
+          onchange="updateSetReps(${idx},${si},this.value)"
+          onfocus="this.select()"/>
+        <button class="set-check-btn" onclick="toggleSetDone(${idx},${si})">
+          ${setS.done ? '✓' : '○'}
+        </button>
+      </div>`).join('');
+
+    const nextEx = phaseData.exercises[idx + 1];
+    const nextName = nextEx ? nextEx[1] : 'Finish';
+
+    return `<div class="ex-item ${isDone ? 'done-ex' : idx === getFirstUndoneIdx() ? 'active-ex' : ''}" id="ex-item-${idx}">
+      <div class="ex-header" onclick="toggleExExpand(${idx})">
+        <div class="ex-num">${isDone ? '✓' : idx+1}</div>
+        <div class="ex-info">
+          <div class="ex-name-text">${name}</div>
+          <div class="ex-meta-text">${numSets}×${reps} · ${tempo} · ${restSecs}s rest</div>
+        </div>
+        <div class="ex-chevron">›</div>
+      </div>
+      <div class="ex-body" id="ex-body-${idx}">
+        ${svgStr ? `<div class="ex-svg-wrap"><div style="width:120px;height:96px;">${svgStr.replace('width="90"','width="120"').replace('height="72"','height="96"').replace('viewBox="0 0 90 72"','viewBox="0 0 90 72"')}</div></div>` : ''}
+        <div class="ex-details-row">
+          <div class="ex-detail-chip"><div class="ex-detail-val">${numSets}×${reps}</div><div class="ex-detail-key">Sets×Reps</div></div>
+          <div class="ex-detail-chip"><div class="ex-detail-val" style="font-family:monospace;font-size:11px;">${tempo}</div><div class="ex-detail-key">Tempo</div></div>
+          <div class="ex-detail-chip"><div class="ex-detail-val">${restSecs}s</div><div class="ex-detail-key">Rest</div></div>
+        </div>
+        <div class="coach-note">${coach}</div>
+        <div class="sets-tracker">
+          <div class="sets-label" style="display:grid;grid-template-columns:28px 1fr 1fr auto;gap:8px;margin-bottom:4px;">
+            <div></div>
+            <div style="font-size:10px;text-align:center;color:var(--text3);text-transform:uppercase;letter-spacing:1px;">Weight (kg)</div>
+            <div style="font-size:10px;text-align:center;color:var(--text3);text-transform:uppercase;letter-spacing:1px;">Reps</div>
+            <div style="width:36px;"></div>
+          </div>
+          <div class="set-rows">${setRows}</div>
+        </div>
+        <button class="rest-btn" onclick="startRestTimer(${restSecs}, '${nextName.replace(/'/g,"\\'")}')">
+          ⏱ Start Rest (${restSecs}s)
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Auto-expand first undone
+  const firstUndone = getFirstUndoneIdx();
+  if (firstUndone >= 0) {
+    const body = document.getElementById(`ex-body-${firstUndone}`);
+    const item = document.getElementById(`ex-item-${firstUndone}`);
+    if (body) body.style.display = 'block';
+    if (item) item.classList.add('expanded');
+  }
+  checkAllDone();
+}
+
+function getFirstUndoneIdx() {
+  if (!currentSession) return 0;
+  return currentSession.setData.findIndex(ex => !ex.sets.every(s => s.done));
+}
+
+function toggleExExpand(idx) {
+  const item = document.getElementById(`ex-item-${idx}`);
+  const body = document.getElementById(`ex-body-${idx}`);
+  const isExpanded = item.classList.contains('expanded');
+  // close all
+  document.querySelectorAll('.ex-item').forEach(el => el.classList.remove('expanded'));
+  document.querySelectorAll('.ex-body').forEach(el => el.style.display = 'none');
+  if (!isExpanded) {
+    item.classList.add('expanded');
+    body.style.display = 'block';
+    setTimeout(() => body.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+  }
+}
+
+function updateSetWeight(exIdx, setIdx, val) {
+  currentSession.setData[exIdx].sets[setIdx].weight = val;
+  updatePR(currentSession.phaseData.exercises[exIdx][1], parseFloat(val));
+}
+
+function updateSetReps(exIdx, setIdx, val) {
+  currentSession.setData[exIdx].sets[setIdx].reps = val;
+}
+
+function toggleSetDone(exIdx, setIdx) {
+  const setObj = currentSession.setData[exIdx].sets[setIdx];
+  setObj.done = !setObj.done;
+
+  const row = document.getElementById(`setrow-${exIdx}-${setIdx}`);
+  row.classList.toggle('set-done', setObj.done);
+  row.querySelector('.set-check-btn').textContent = setObj.done ? '✓' : '○';
+
+  const allSetsDone = currentSession.setData[exIdx].sets.every(s => s.done);
+  const item = document.getElementById(`ex-item-${exIdx}`);
+  item.classList.toggle('done-ex', allSetsDone);
+  item.querySelector('.ex-num').textContent = allSetsDone ? '✓' : exIdx + 1;
+
+  // Auto-advance: if all sets done, auto-start timer and open next
+  if (allSetsDone) {
+    const ex = currentSession.phaseData.exercises[exIdx];
+    const nextEx = currentSession.phaseData.exercises[exIdx + 1];
+    const nextName = nextEx ? nextEx[1] : 'Finish!';
+    startRestTimer(ex[6], nextName);
+    const nextUndone = currentSession.setData.findIndex((e, i) => i > exIdx && !e.sets.every(s => s.done));
+    if (nextUndone >= 0) {
+      setTimeout(() => toggleExExpand(nextUndone), 200);
+    }
+  }
+  checkAllDone();
+}
+
+function checkAllDone() {
+  if (!currentSession) return;
+  const allDone = currentSession.setData.every(ex => ex.sets.every(s => s.done));
+  document.getElementById('finish-session-btn').classList.toggle('hidden', !allDone);
+}
+
+function updatePR(exName, weight) {
+  if (!weight || isNaN(weight)) return;
+  if (!state.prs[exName] || weight > state.prs[exName]) {
+    state.prs[exName] = weight;
+  }
+}
+
+function finishSession() {
+  const { sessionId, setData, phaseData } = currentSession;
+  const week = state.currentWeek;
+
+  // Save log
+  const logKey = `W${week}_${sessionId}`;
+  state.log[logKey] = {
+    date: new Date().toISOString(),
+    sets: setData.map((ex, i) => ({
+      name: ex.name,
+      sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps }))
+    }))
+  };
+
+  // Mark done
+  state.weekSessionsDone[sessionId] = true;
+  if (!state.allWeeksProgress[week]) state.allWeeksProgress[week] = {};
+  state.allWeeksProgress[week][sessionId] = true;
+
+  saveState();
+  currentSession = null;
+
+  // Go home with celebration
+  switchTab('home');
+  document.getElementById('tab-session').style.display = 'none';
+  renderHome();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// REST TIMER
+// ══════════════════════════════════════════════════════════════════════════════
+let timerInterval = null;
+let timerTotal = 0;
+let timerRemaining = 0;
+const CIRCUMFERENCE = 2 * Math.PI * 88; // r=88
+
+function startRestTimer(seconds, nextLabel) {
+  clearInterval(timerInterval);
+  timerTotal = seconds;
+  timerRemaining = seconds;
+
+  const overlay = document.getElementById('timer-overlay');
+  const circle = document.getElementById('timer-circle');
+  const secsEl = document.getElementById('timer-secs');
+  const nextEl = document.getElementById('timer-next-label');
+  const progFill = document.getElementById('timer-prog-fill');
+
+  overlay.classList.remove('hidden');
+  document.getElementById('timer-next-label').textContent = `Next: ${nextLabel}`;
+
+  function tick() {
+    secsEl.textContent = timerRemaining;
+    const frac = timerRemaining / timerTotal;
+    const offset = CIRCUMFERENCE * (1 - frac);
+    circle.style.strokeDashoffset = offset;
+    progFill.style.width = (frac * 100) + '%';
+
+    // Color shift: green → amber → red as time runs out
+    if (frac > 0.5) circle.style.stroke = '#4a90d9';
+    else if (frac > 0.25) circle.style.stroke = '#f39c12';
+    else circle.style.stroke = '#e63946';
+
+    if (timerRemaining <= 0) {
+      clearInterval(timerInterval);
+      // Haptic if available
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      overlay.classList.add('hidden');
+      return;
+    }
+    timerRemaining--;
+  }
+
+  tick();
+  timerInterval = setInterval(tick, 1000);
+}
+
+function skipTimer() {
+  clearInterval(timerInterval);
+  document.getElementById('timer-overlay').classList.add('hidden');
+}
+
+function addTimerSeconds(n) {
+  timerTotal += n;
+  timerRemaining += n;
+}
+
+// Close on backdrop tap
+document.getElementById('timer-overlay').addEventListener('click', function(e) {
+  if (e.target === this) skipTimer();
+});
+
+// ══════════════════════════════════════════════════════════════════════════════
+// LOG SCREEN
+// ══════════════════════════════════════════════════════════════════════════════
+let logSelectedWeek = 1;
+
+function renderLog() {
+  // Week chips
+  const sel = document.getElementById('log-week-selector');
+  sel.innerHTML = Array.from({length: 12}, (_, i) => {
+    const w = i + 1;
+    const isDeload = DELOAD_WEEKS.includes(w);
+    const hasSessions = state.allWeeksProgress[w] &&
+      (state.allWeeksProgress[w].A || state.allWeeksProgress[w].B || state.allWeeksProgress[w].C);
+    let cls = 'week-chip';
+    if (w === logSelectedWeek) cls += ' selected';
+    if (isDeload) cls += ' deload';
+    return `<div class="${cls}" onclick="selectLogWeek(${w})">Wk ${w}${isDeload ? ' 😴' : hasSessions ? ' ✓' : ''}</div>`;
+  }).join('');
+
+  // Content
+  const content = document.getElementById('log-content');
+  const sessions = PROGRAMME.sessions;
+  const week = logSelectedWeek;
+  const phase = getPhaseForWeek(week);
+
+  content.innerHTML = sessions.map(sess => {
+    const logKey = `W${week}_${sess.id}`;
+    const log = state.log[logKey];
+    const isDone = state.allWeeksProgress[week] && state.allWeeksProgress[week][sess.id];
+    const dateStr = log ? new Date(log.date).toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short'}) : '—';
+
+    const exRows = log ? log.sets.map(ex => {
+      const bestWeight = ex.sets.map(s => parseFloat(s.weight)||0).filter(Boolean);
+      const maxW = bestWeight.length ? Math.max(...bestWeight) : '—';
+      const setsSummary = ex.sets.map(s => s.reps || '?').join('/');
+      return `<div class="log-ex-row">
+        <div class="log-ex-name">${ex.name}</div>
+        <div class="log-ex-weight">${maxW !== '—' ? maxW + ' kg' : '—'}</div>
+        <div class="log-ex-sets">${setsSummary}</div>
+      </div>`;
+    }).join('') : '<div style="padding:12px 14px;font-size:12px;color:var(--text3);">Not yet completed</div>';
+
+    return `<div class="log-session-block">
+      <div class="log-session-head">
+        <div class="log-session-letter">${sess.id}</div>
+        <div class="log-session-info">
+          <div class="log-session-name">${sess.name}</div>
+          <div class="log-session-sub">${isDone ? dateStr : 'Not done yet'} · Phase ${phase.id}</div>
+        </div>
+        <div class="log-session-done">${isDone ? '✅' : '⬜'}</div>
+      </div>
+      ${exRows}
+    </div>`;
+  }).join('');
+}
+
+function selectLogWeek(w) {
+  logSelectedWeek = w;
+  renderLog();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PROGRESS SCREEN
+// ══════════════════════════════════════════════════════════════════════════════
+function renderProgress() {
+  const totalDone = Object.values(state.allWeeksProgress || {}).reduce((a, wk) => {
+    return a + [wk.A, wk.B, wk.C].filter(Boolean).length;
+  }, 0);
+  const pct = Math.round((totalDone / TOTAL_SESSIONS) * 100);
+  const circumference = 427;
+
+  document.getElementById('prog-ring').style.strokeDashoffset = circumference * (1 - pct/100);
+  document.getElementById('prog-pct-text').textContent = pct + '%';
+  document.getElementById('prog-sub-text').textContent = `${totalDone} / ${TOTAL_SESSIONS}`;
+  document.getElementById('prog-completed').textContent = totalDone;
+  document.getElementById('prog-remaining').textContent = TOTAL_SESSIONS - totalDone;
+  document.getElementById('prog-phase-done').textContent = getPhaseForWeek(state.currentWeek).id;
+
+  const streak = calcStreak();
+  document.getElementById('prog-streak').textContent = streak;
+  document.getElementById('stat-streak').textContent = streak;
+  document.getElementById('prog-streak-sub').textContent =
+    streak === 0 ? 'Start your streak!' :
+    streak < 5 ? 'Building momentum' :
+    streak < 15 ? 'On a roll 🔥' : 'Beast mode 💪';
+
+  // PRs
+  const prGrid = document.getElementById('pr-grid');
+  const keyExercises = [
+    'DB Floor Press', 'DB Bent-Over Row',
+    'DB Seated Shoulder Press', 'DB Bulgarian Split Squat',
+    'DB Romanian Deadlift', 'DB Bulgarian Split Squat (heavy)',
+  ];
+  prGrid.innerHTML = keyExercises.map(name => {
+    const w = state.prs[name] || 0;
+    return `<div class="pr-card">
+      <div class="pr-exercise">${name.replace('DB ','')}</div>
+      <div class="pr-weight">${w || '—'}<span> kg</span></div>
+      <div class="pr-delta ${w ? 'up' : 'same'}">${w ? '↑ Personal best' : 'Not logged yet'}</div>
+    </div>`;
+  }).join('');
+
+  // Volume bar chart
+  renderVolumeChart();
+}
+
+function renderVolumeChart() {
+  const svg = document.getElementById('volume-chart');
+  const prog = state.allWeeksProgress || {};
+  const weeks = Array.from({length: 12}, (_, i) => i + 1);
+  const vals = weeks.map(w => {
+    const wk = prog[w] || {};
+    return [wk.A, wk.B, wk.C].filter(Boolean).length;
+  });
+  const max = 3;
+  const W = 300, H = 100, padX = 4, barW = (W - padX * 2 * 12) / 12;
+
+  let bars = '';
+  let labels = '';
+  weeks.forEach((w, i) => {
+    const v = vals[i];
+    const x = padX + i * (barW + padX * 2);
+    const barH = v ? (v / max) * 72 : 3;
+    const y = H - 20 - barH;
+    const isDeload = DELOAD_WEEKS.includes(w);
+    const isCurrent = w === state.currentWeek;
+    const color = isCurrent ? '#e63946' : isDeload ? '#f39c12' : v === 3 ? '#2ecc71' : v > 0 ? '#4a90d9' : '#2e3245';
+    bars += `<rect x="${x}" y="${y}" width="${barW}" height="${barH}" rx="2" fill="${color}"/>`;
+    if (w % 2 === 1 || isCurrent) {
+      labels += `<text x="${x + barW/2}" y="${H - 4}" text-anchor="middle" font-size="8" fill="${isCurrent ? '#e63946' : '#555d7a'}">${w}</text>`;
+    }
+  });
+
+  svg.innerHTML = bars + labels;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// WEEK PICKER
+// ══════════════════════════════════════════════════════════════════════════════
+function showWeekPicker() {
+  const grid = document.getElementById('week-picker-grid');
+  const prog = state.allWeeksProgress || {};
+  grid.innerHTML = Array.from({length: 12}, (_, i) => {
+    const w = i + 1;
+    const isDeload = DELOAD_WEEKS.includes(w);
+    const isCurrent = w === state.currentWeek;
+    const wkData = prog[w] || {};
+    const isComplete = wkData.A && wkData.B && wkData.C;
+    let cls = 'modal-week-btn';
+    if (isCurrent) cls += ' current';
+    if (isDeload) cls += ' deload-wk';
+    if (isComplete) cls += ' completed-wk';
+    return `<button class="${cls}" onclick="selectWeek(${w})">
+      Wk ${w}<br><span style="font-size:10px;opacity:.7;">${isDeload ? 'Deload' : isComplete ? '✓' : ''}</span>
+    </button>`;
+  }).join('');
+  document.getElementById('week-picker-modal').classList.remove('hidden');
+}
+
+function closeWeekPicker(e) {
+  if (e.target.id === 'week-picker-modal') {
+    document.getElementById('week-picker-modal').classList.add('hidden');
+  }
+}
+
+function selectWeek(w) {
+  state.currentWeek = w;
+  // Restore session done state from allWeeksProgress
+  const prog = state.allWeeksProgress[w] || {};
+  state.weekSessionsDone = { A: !!prog.A, B: !!prog.B, C: !!prog.C };
+  saveState();
+  document.getElementById('week-picker-modal').classList.add('hidden');
+  renderHome();
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════════════════════════
+let currentTab = 'home';
+
+function switchTab(tab) {
+  const tabs = ['home', 'session', 'log', 'progress'];
+  tabs.forEach(t => {
+    const screen = document.getElementById(`screen-${t}`);
+    const tabBtn = document.getElementById(`tab-${t}`);
+    if (!screen) return;
+    if (t === tab) {
+      screen.classList.remove('hidden', 'slide-left');
+      if (tabBtn) tabBtn.classList.add('active');
+    } else {
+      screen.classList.add(currentTab === tab ? 'hidden' : 'hidden');
+      if (tabBtn) tabBtn.classList.remove('active');
+    }
+  });
+  currentTab = tab;
+
+  if (tab === 'log') renderLog();
+  if (tab === 'progress') renderProgress();
+}
+
+function goHome() {
+  switchTab('home');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  logSelectedWeek = state.currentWeek;
+  renderHome();
+});
+
+// Prevent double-tap zoom on buttons
+document.addEventListener('touchend', e => {
+  if (e.target.tagName === 'BUTTON') e.preventDefault();
+}, { passive: false });
+</script>
+</body>
+</html>
